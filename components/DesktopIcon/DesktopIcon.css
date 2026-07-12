@@ -1,0 +1,101 @@
+.desktop-icon {
+  width: 118px;
+  min-height: 126px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: center;
+  perspective: 700px;
+}
+
+.desktop-icon:hover {
+  border-color: rgba(124,255,107,0.38);
+  background: rgba(124,255,107,0.055);
+}
+
+.desktop-icon__object {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  transform-style: preserve-3d;
+}
+
+.desktop-icon__pixel {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255,255,255,0.85);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.12), transparent 48%),
+    rgba(8,8,8,0.9);
+  box-shadow:
+    4px 0 0 #000,
+    0 4px 0 #000,
+    8px 8px 0 rgba(0,0,0,0.38);
+  color: var(--accent);
+  font-size: 29px;
+  image-rendering: pixelated;
+}
+
+.desktop-icon__pixel::before,
+.desktop-icon__pixel::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: currentColor;
+}
+
+.desktop-icon__pixel::before {
+  top: -5px;
+  left: -5px;
+}
+
+.desktop-icon__pixel::after {
+  right: -5px;
+  bottom: -5px;
+}
+
+.desktop-icon--purple .desktop-icon__pixel {
+  color: var(--purple);
+}
+
+.desktop-icon--white .desktop-icon__pixel {
+  color: #fff;
+}
+
+.desktop-icon__shadow {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  width: 54px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.55);
+  filter: blur(5px);
+  transform: translateZ(-20px);
+}
+
+.desktop-icon__label,
+.desktop-icon__status {
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+}
+
+.desktop-icon__label {
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.desktop-icon__status {
+  color: var(--muted);
+  font-size: 7px;
+}
