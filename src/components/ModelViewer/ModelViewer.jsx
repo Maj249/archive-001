@@ -69,7 +69,7 @@ function createMaterials(accent) {
   return { solidMaterial, wireMaterial };
 }
 
-function buildStlObject(geometry, materials) {
+function buildStlObject(geometry, materials, showWireframe) {
   geometry.computeVertexNormals();
 
   const root = new THREE.Group();
@@ -77,18 +77,23 @@ function buildStlObject(geometry, materials) {
     geometry,
     materials.solidMaterial
   );
-  const wireMesh = new THREE.Mesh(
-    geometry,
-    materials.wireMaterial
-  );
 
-  wireMesh.scale.setScalar(1.002);
-  root.add(solidMesh, wireMesh);
+  root.add(solidMesh);
+
+  if (showWireframe) {
+    const wireMesh = new THREE.Mesh(
+      geometry,
+      materials.wireMaterial
+    );
+
+    wireMesh.scale.setScalar(1.002);
+    root.add(wireMesh);
+  }
 
   return root;
 }
 
-function buildObjObject(object, materials) {
+function buildObjObject(object, materials, showWireframe) {
   const originalMaterials = new Set();
 
   object.traverse((child) => {
@@ -105,21 +110,25 @@ function buildObjObject(object, materials) {
     }
   });
 
-  const wireObject = object.clone(true);
-
   object.traverse((child) => {
     if (child.isMesh) {
       child.material = materials.solidMaterial;
     }
   });
 
+  originalMaterials.forEach((material) => material.dispose());
+
+  if (!showWireframe) {
+    return object;
+  }
+
+  const wireObject = object.clone(true);
+
   wireObject.traverse((child) => {
     if (child.isMesh) {
       child.material = materials.wireMaterial;
     }
   });
-
-  originalMaterials.forEach((material) => material.dispose());
 
   const root = new THREE.Group();
   root.add(object, wireObject);
@@ -179,6 +188,12 @@ export default function ModelViewer({
 
     let animationFrame = 0;
     let disposed = false;
+    let lastRenderTime = 0;
+    let isOnScreen = true;
+
+    const isSwaga = /swaga/i.test(modelUrl);
+    const showWireframe = !isSwaga;
+    const targetFrameTime = isSwaga ? 1000 / 30 : 0;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.01, 100);
@@ -186,12 +201,12 @@ export default function ModelViewer({
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: true,
+      antialias: !isSwaga,
       powerPreference: "high-performance",
     });
 
     renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, 1.75)
+      Math.min(window.devicePixelRatio || 1, isSwaga ? 1.1 : 1.75)
     );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -231,7 +246,7 @@ export default function ModelViewer({
     scene.add(lowerLight);
 
     const floorRing = new THREE.Mesh(
-      new THREE.RingGeometry(0.83, 0.85, 96),
+      new THREE.RingGeometry(0.83, 0.85, isSwaga ? 48 : 96),
       new THREE.MeshBasicMaterial({
         color: accent,
         transparent: true,
@@ -260,8 +275,8 @@ export default function ModelViewer({
 
         const renderable =
           modelFormat === "OBJ"
-            ? buildObjObject(loadedModel, materials)
-            : buildStlObject(loadedModel, materials);
+            ? buildObjObject(loadedModel, materials, showWireframe)
+            : buildStlObject(loadedModel, materials, showWireframe);
 
         const size = centreAndFitObject(renderable, fit);
         const modelGroup = new THREE.Group();
@@ -303,10 +318,25 @@ export default function ModelViewer({
     resizeObserver.observe(mount);
     resize();
 
-    function render() {
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isOnScreen = entry.isIntersecting;
+      },
+      { threshold: 0.01 }
+    );
+    intersectionObserver.observe(mount);
+
+    function render(timestamp = 0) {
+      animationFrame = window.requestAnimationFrame(render);
+
+      if (document.hidden || !isOnScreen) return;
+      if (targetFrameTime && timestamp - lastRenderTime < targetFrameTime) {
+        return;
+      }
+
+      lastRenderTime = timestamp;
       controls.update();
       renderer.render(scene, camera);
-      animationFrame = window.requestAnimationFrame(render);
     }
 
     render();
@@ -321,6 +351,7 @@ export default function ModelViewer({
       disposed = true;
       window.cancelAnimationFrame(animationFrame);
       resizeObserver.disconnect();
+      intersectionObserver.disconnect();
       renderer.domElement.removeEventListener(
         "dblclick",
         resetView
