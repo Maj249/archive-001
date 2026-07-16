@@ -1,0 +1,493 @@
+.taskbar {
+  position: absolute;
+  right: 16px;
+  bottom: 10px;
+  left: 16px;
+  z-index: 120;
+
+  height: 54px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: stretch;
+  overflow: visible;
+
+  border: 1px solid rgba(255, 174, 36, 0.28);
+  background:
+    linear-gradient(90deg, rgba(255, 174, 36, 0.055), transparent 44%),
+    rgba(5, 3, 2, 0.97);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.4),
+    inset 0 0 24px rgba(255, 174, 36, 0.015);
+
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.taskbar__start {
+  position: relative;
+  min-width: 172px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 0 8px;
+  overflow: visible;
+
+  border: 0;
+  border-right: 1px solid rgba(255, 174, 36, 0.22);
+  background:
+    linear-gradient(90deg, rgba(255, 174, 36, 0.09), transparent 72%);
+  color: var(--accent-bright);
+  text-align: left;
+  isolation: isolate;
+}
+
+.taskbar__start::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 8px,
+      rgba(255, 174, 36, 0.08) 9px
+    );
+  transition: opacity 0.18s ease;
+}
+
+.taskbar__start:hover::before,
+.taskbar__start:focus-visible::before,
+.taskbar__start--active::before {
+  opacity: 1;
+}
+
+.taskbar__start-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.taskbar__start-copy strong {
+  color: var(--text-bright);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+}
+
+.taskbar__start-copy small {
+  color: rgba(255, 174, 36, 0.52);
+  font-size: 5px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+/* Animated MAGI core */
+
+.magi-core {
+  position: relative;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 174, 36, 0.62);
+  background:
+    radial-gradient(circle, rgba(255, 174, 36, 0.16), transparent 58%),
+    #050302;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 0 0 14px rgba(255, 174, 36, 0.12),
+    0 0 16px rgba(255, 174, 36, 0.1);
+  clip-path: polygon(8% 0, 92% 0, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0 92%, 0 8%);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.magi-core::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(65, 191, 255, 0.22);
+  clip-path: inherit;
+}
+
+.magi-core::after {
+  content: "CORE_05";
+  position: absolute;
+  right: 3px;
+  bottom: 2px;
+  color: rgba(65, 191, 255, 0.5);
+  font-size: 3px;
+  letter-spacing: 0.08em;
+}
+
+.magi-core__orbit {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.magi-core__orbit--outer {
+  width: 31px;
+  height: 31px;
+  border-top: 1px solid var(--amber);
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid rgba(65, 191, 255, 0.52);
+  border-left: 1px solid transparent;
+  animation: magi-core-spin 3.2s linear infinite;
+}
+
+.magi-core__orbit--inner {
+  width: 23px;
+  height: 23px;
+  border-top: 1px solid transparent;
+  border-right: 1px solid var(--green);
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid rgba(255, 174, 36, 0.72);
+  animation: magi-core-spin-reverse 2.1s linear infinite;
+}
+
+.magi-core__scan {
+  position: absolute;
+  right: 4px;
+  left: 4px;
+  height: 1px;
+  z-index: 3;
+  background: var(--green);
+  box-shadow: 0 0 7px rgba(82, 255, 111, 0.82);
+  animation: magi-core-scan 2.4s ease-in-out infinite;
+}
+
+.magi-core__letter {
+  position: relative;
+  z-index: 4;
+  color: #fff4cf;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.08em;
+  text-shadow:
+    1px 0 0 rgba(65, 191, 255, 0.75),
+    -1px 0 0 rgba(255, 174, 36, 0.75),
+    0 0 8px rgba(255, 174, 36, 0.7);
+  animation: magi-core-letter 4.2s steps(1) infinite;
+}
+
+.magi-core__letter::before,
+.magi-core__letter::after {
+  content: attr(data-letter);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.magi-core__letter::before {
+  color: var(--blue);
+  transform: translateX(-2px);
+}
+
+.magi-core__letter::after {
+  color: var(--amber);
+  transform: translateX(2px);
+}
+
+.magi-core__spark {
+  position: absolute;
+  z-index: 5;
+  width: 2px;
+  height: 2px;
+  display: block;
+  background: var(--amber);
+  box-shadow: 0 0 6px rgba(255, 174, 36, 0.9);
+  animation: magi-core-spark 2s steps(1) infinite;
+}
+
+.magi-core__spark--one {
+  top: 7px;
+  left: 8px;
+}
+
+.magi-core__spark--two {
+  right: 7px;
+  bottom: 10px;
+  background: var(--blue);
+  animation-delay: 0.65s;
+}
+
+.magi-core__spark--three {
+  right: 10px;
+  top: 6px;
+  background: var(--green);
+  animation-delay: 1.25s;
+}
+
+.taskbar__start:hover .magi-core,
+.taskbar__start:focus-visible .magi-core,
+.taskbar__start--active .magi-core {
+  transform: scale(1.12) rotate(-2deg);
+  border-color: var(--green);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 0 0 18px rgba(82, 255, 111, 0.15),
+    0 0 24px rgba(82, 255, 111, 0.24),
+    0 0 42px rgba(255, 174, 36, 0.12);
+}
+
+.taskbar__start:hover .magi-core__letter::before,
+.taskbar__start:focus-visible .magi-core__letter::before {
+  opacity: 0.64;
+  animation: magi-core-glitch-left 0.52s steps(1) infinite;
+}
+
+.taskbar__start:hover .magi-core__letter::after,
+.taskbar__start:focus-visible .magi-core__letter::after {
+  opacity: 0.64;
+  animation: magi-core-glitch-right 0.52s steps(1) infinite reverse;
+}
+
+.taskbar__center {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 14px;
+}
+
+.taskbar__status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.status-led {
+  width: 5px;
+  height: 5px;
+  display: block;
+  background: var(--green);
+  box-shadow: var(--green-glow);
+  animation: taskbar-led 1.5s steps(1) infinite;
+}
+
+.taskbar__app {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-bright);
+  font-size: 8px;
+  letter-spacing: 0.11em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskbar__metrics {
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid rgba(255, 174, 36, 0.16);
+}
+
+.metric {
+  min-width: 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 10px;
+  border-right: 1px solid rgba(255, 174, 36, 0.13);
+}
+
+.metric small {
+  color: rgba(255, 174, 36, 0.38);
+  font-size: 6px;
+  letter-spacing: 0.1em;
+}
+
+.metric strong {
+  color: var(--amber);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-shadow: 0 0 5px rgba(255, 174, 36, 0.28);
+}
+
+.taskbar__system {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  color: rgba(255, 240, 179, 0.72);
+  font-size: 10px;
+}
+
+.taskbar__system time {
+  min-width: 44px;
+  color: var(--text-bright);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+@keyframes magi-core-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes magi-core-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes magi-core-scan {
+  0%,
+  100% {
+    transform: translateY(-13px);
+    opacity: 0;
+  }
+
+  15%,
+  85% {
+    opacity: 0.82;
+  }
+
+  50% {
+    transform: translateY(13px);
+  }
+}
+
+@keyframes magi-core-letter {
+  0%,
+  91%,
+  100% {
+    transform: translate(0);
+  }
+
+  92% {
+    transform: translate(-1px, 1px);
+  }
+
+  94% {
+    transform: translate(2px, -1px);
+  }
+
+  96% {
+    transform: translate(-1px, 0);
+  }
+}
+
+@keyframes magi-core-glitch-left {
+  0%,
+  100% {
+    clip-path: inset(0 0 62% 0);
+  }
+
+  50% {
+    clip-path: inset(58% 0 10% 0);
+  }
+}
+
+@keyframes magi-core-glitch-right {
+  0%,
+  100% {
+    clip-path: inset(40% 0 30% 0);
+  }
+
+  50% {
+    clip-path: inset(8% 0 70% 0);
+  }
+}
+
+@keyframes magi-core-spark {
+  0%,
+  64%,
+  68%,
+  100% {
+    opacity: 0;
+  }
+
+  65%,
+  67% {
+    opacity: 1;
+  }
+}
+
+@keyframes taskbar-led {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (max-width: 800px) {
+  .taskbar {
+    right: calc(8px + var(--safe-right));
+    bottom: calc(8px + var(--safe-bottom));
+    left: calc(8px + var(--safe-left));
+    height: 50px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .taskbar__metrics {
+    display: none;
+  }
+
+  .taskbar__start {
+    min-width: 64px;
+    padding: 0 8px;
+  }
+
+  .taskbar__start-copy {
+    display: none;
+  }
+
+  .magi-core {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 520px) {
+  .taskbar__center {
+    gap: 8px;
+    padding: 0 9px;
+  }
+
+  .taskbar__status {
+    font-size: 0;
+  }
+
+  .taskbar__app {
+    font-size: 7px;
+  }
+
+  .taskbar__system {
+    gap: 8px;
+    padding: 0 9px;
+  }
+
+  .taskbar__system svg:first-child {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magi-core__orbit,
+  .magi-core__scan,
+  .magi-core__letter,
+  .magi-core__spark,
+  .status-led {
+    animation: none;
+  }
+}

@@ -1,0 +1,285 @@
+.animated-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 64% 43%, rgba(15, 80, 47, 0.14), transparent 29%),
+    radial-gradient(circle at 63% 45%, rgba(27, 80, 110, 0.1), transparent 47%),
+    linear-gradient(180deg, #030504 0%, #020302 58%, #050302 100%);
+  isolation: isolate;
+}
+
+.animated-background__void {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 174, 36, 0.025) 1px, transparent 1px),
+    linear-gradient(rgba(65, 191, 255, 0.02) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.42;
+  mask-image: radial-gradient(circle at 62% 43%, #000, transparent 74%);
+}
+
+.animated-background__ceiling,
+.animated-background__floor {
+  position: absolute;
+  left: 12%;
+  width: 76%;
+  height: 56%;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(65, 191, 255, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 191, 255, 0.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform-style: preserve-3d;
+  perspective: 500px;
+}
+
+.animated-background__ceiling {
+  top: -38%;
+  transform: perspective(460px) rotateX(-68deg);
+  transform-origin: bottom;
+  mask-image: linear-gradient(to top, #000, transparent 72%);
+}
+
+.animated-background__floor {
+  bottom: -35%;
+  transform: perspective(460px) rotateX(68deg);
+  transform-origin: top;
+  mask-image: linear-gradient(to bottom, #000, transparent 74%);
+  animation: animated-grid-drift 10s linear infinite;
+}
+
+.animated-background__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.84;
+  filter:
+    drop-shadow(0 0 7px rgba(82, 255, 111, 0.2))
+    drop-shadow(0 0 16px rgba(65, 191, 255, 0.08));
+}
+
+.animated-background__frame {
+  position: absolute;
+  inset: 62px 64px 76px;
+  border: 1px solid rgba(65, 191, 255, 0.1);
+  clip-path: polygon(0 0, 12% 0, 12% 1px, 88% 1px, 88% 0, 100% 0, 100% 100%, 88% 100%, 88% calc(100% - 1px), 12% calc(100% - 1px), 12% 100%, 0 100%);
+}
+
+.animated-background__frame i {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--amber);
+  border-style: solid;
+  opacity: 0.52;
+}
+
+.animated-background__frame i:nth-child(1) {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.animated-background__frame i:nth-child(2) {
+  top: -1px;
+  right: -1px;
+  border-width: 1px 1px 0 0;
+}
+
+.animated-background__frame i:nth-child(3) {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+.animated-background__frame i:nth-child(4) {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 1px 1px;
+}
+
+.animated-background__telemetry {
+  position: absolute;
+  top: 22%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: rgba(255, 174, 36, 0.3);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 6px;
+  letter-spacing: 0.08em;
+}
+
+.animated-background__telemetry strong {
+  margin-bottom: 8px;
+  color: rgba(82, 255, 111, 0.62);
+  font-size: 7px;
+  font-weight: 500;
+}
+
+.animated-background__telemetry--left {
+  left: 33%;
+}
+
+.animated-background__telemetry--right {
+  right: 3.5%;
+  text-align: right;
+}
+
+.animated-background__target {
+  position: absolute;
+  top: 45%;
+  left: 64%;
+  width: min(34vw, 440px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(82, 255, 111, 0.1);
+  border-radius: 50%;
+  animation: animated-target-spin 18s linear infinite;
+}
+
+.animated-background__target::before,
+.animated-background__target::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border: 1px dashed rgba(65, 191, 255, 0.13);
+  border-radius: 50%;
+}
+
+.animated-background__target::after {
+  inset: 36%;
+  border-style: solid;
+  border-color: rgba(255, 174, 36, 0.16);
+}
+
+.animated-background__target span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(82, 255, 111, 0.3);
+  transform: translate(-50%, -50%);
+}
+
+.animated-background__target span:first-child {
+  width: 100%;
+  height: 1px;
+}
+
+.animated-background__target span:last-child {
+  width: 1px;
+  height: 100%;
+}
+
+.animated-background__scanline {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 16%;
+  background: linear-gradient(to bottom, transparent, rgba(82, 255, 111, 0.025), transparent);
+  animation: animated-scan 7s linear infinite;
+}
+
+.animated-background__noise {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  animation: animated-noise 0.25s steps(2) infinite;
+}
+
+.animated-background__vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(2, 3, 2, 0.62), transparent 28%, transparent 70%, rgba(2, 3, 2, 0.42)),
+    radial-gradient(circle at center, transparent 42%, rgba(0, 0, 0, 0.56) 100%);
+}
+
+@keyframes animated-grid-drift {
+  to {
+    background-position: 0 48px, 48px 0;
+  }
+}
+
+@keyframes animated-target-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes animated-scan {
+  from {
+    transform: translateY(-120%);
+  }
+
+  to {
+    transform: translateY(720%);
+  }
+}
+
+@keyframes animated-noise {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(3%, -2%);
+  }
+
+  50% {
+    transform: translate(-2%, 3%);
+  }
+
+  75% {
+    transform: translate(2%, 2%);
+  }
+}
+
+@media (max-width: 850px) {
+  .animated-background__telemetry--left,
+  .animated-background__telemetry--right {
+    display: none;
+  }
+
+  .animated-background__frame {
+    inset: 56px 20px 74px;
+  }
+
+  .animated-background__target {
+    left: 68%;
+    width: 52vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .animated-background__canvas {
+    opacity: 0.58;
+  }
+
+  .animated-background__target {
+    top: 38%;
+    left: 62%;
+    width: 72vw;
+  }
+
+  .animated-background__floor,
+  .animated-background__ceiling {
+    width: 110%;
+    left: -5%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-background__floor,
+  .animated-background__target,
+  .animated-background__scanline,
+  .animated-background__noise {
+    animation: none;
+  }
+}

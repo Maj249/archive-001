@@ -1,0 +1,291 @@
+.desktop-icon {
+  --icon-accent: var(--green);
+  --icon-glow: rgba(82, 255, 111, 0.34);
+
+  position: relative;
+  width: 108px;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 5px 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  text-align: center;
+  isolation: isolate;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.desktop-icon--white {
+  --icon-accent: #e9f3ed;
+  --icon-glow: rgba(233, 243, 237, 0.24);
+}
+
+.desktop-icon--purple {
+  --icon-accent: #a995ff;
+  --icon-glow: rgba(169, 149, 255, 0.34);
+}
+
+.desktop-icon:hover,
+.desktop-icon:focus-visible {
+  z-index: 5;
+  border-color: color-mix(in srgb, var(--icon-accent) 48%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--icon-accent) 7%, transparent), transparent),
+    rgba(3, 4, 3, 0.78);
+  outline: 0;
+}
+
+.desktop-icon__stage {
+  position: relative;
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  perspective: 260px;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 0 8px var(--icon-glow));
+  transition:
+    transform 0.22s ease,
+    filter 0.22s ease;
+}
+
+.desktop-icon__stage::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid color-mix(in srgb, var(--icon-accent) 28%, transparent);
+  background:
+    linear-gradient(color-mix(in srgb, var(--icon-accent) 7%, transparent), transparent),
+    rgba(3, 4, 3, 0.72);
+  clip-path: polygon(8% 0, 92% 0, 100% 8%, 100% 92%, 92% 100%, 8% 100%, 0 92%, 0 8%);
+  box-shadow:
+    inset 0 0 12px color-mix(in srgb, var(--icon-accent) 8%, transparent),
+    7px 8px 0 rgba(0, 0, 0, 0.22);
+}
+
+.desktop-icon__orbit {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  border-style: solid;
+  border-color: transparent;
+}
+
+.desktop-icon__orbit--one {
+  inset: 1px;
+  border-width: 1px;
+  border-top-color: color-mix(in srgb, var(--icon-accent) 54%, transparent);
+  border-bottom-color: rgba(65, 191, 255, 0.24);
+  clip-path: polygon(0 0, 38% 0, 38% 1px, 62% 1px, 62% 0, 100% 0, 100% 100%, 62% 100%, 62% calc(100% - 1px), 38% calc(100% - 1px), 38% 100%, 0 100%);
+  animation: desktop-icon-orbit 7s linear infinite;
+  animation-delay: calc(var(--icon-index) * -0.37s);
+}
+
+.desktop-icon__orbit--two {
+  inset: 13px;
+  border-width: 1px;
+  border-right-color: rgba(82, 255, 111, 0.3);
+  border-left-color: rgba(255, 174, 36, 0.24);
+  transform: rotate(45deg);
+  animation: desktop-icon-orbit-reverse 5s linear infinite;
+  animation-delay: calc(var(--icon-index) * -0.25s);
+}
+
+.desktop-icon__scan {
+  position: absolute;
+  z-index: 4;
+  right: 11px;
+  left: 11px;
+  height: 1px;
+  opacity: 0;
+  background: var(--icon-accent);
+  box-shadow: 0 0 8px var(--icon-glow);
+}
+
+.desktop-icon__icon {
+  position: relative;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--icon-accent);
+  transform-style: preserve-3d;
+  animation: desktop-icon-float 4.8s ease-in-out infinite;
+  animation-delay: calc(var(--icon-index) * -0.42s);
+}
+
+.desktop-icon__icon > * {
+  max-width: 100%;
+  max-height: 100%;
+  transform-style: preserve-3d;
+}
+
+.desktop-icon__node {
+  position: absolute;
+  z-index: 6;
+  width: 3px;
+  height: 3px;
+  background: var(--icon-accent);
+  box-shadow: 0 0 7px var(--icon-glow);
+  opacity: 0.5;
+}
+
+.desktop-icon__node--one {
+  top: 5px;
+  right: 8px;
+}
+
+.desktop-icon__node--two {
+  bottom: 7px;
+  left: 6px;
+  background: var(--amber);
+}
+
+.desktop-icon__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.desktop-icon__copy strong {
+  max-width: 98px;
+  overflow: hidden;
+  color: var(--text-bright);
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: 0.05em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop-icon__copy small {
+  color: color-mix(in srgb, var(--icon-accent) 48%, transparent);
+  font-size: 5px;
+  letter-spacing: 0.08em;
+}
+
+.desktop-icon:hover .desktop-icon__stage,
+.desktop-icon:focus-visible .desktop-icon__stage {
+  transform: translateY(-3px) scale(1.08) rotateX(8deg);
+  filter:
+    drop-shadow(0 0 9px var(--icon-glow))
+    drop-shadow(0 0 18px var(--icon-glow));
+}
+
+.desktop-icon:hover .desktop-icon__orbit--one,
+.desktop-icon:focus-visible .desktop-icon__orbit--one {
+  animation-duration: 0.8s;
+}
+
+.desktop-icon:hover .desktop-icon__orbit--two,
+.desktop-icon:focus-visible .desktop-icon__orbit--two {
+  animation-duration: 0.62s;
+}
+
+.desktop-icon:hover .desktop-icon__icon,
+.desktop-icon:focus-visible .desktop-icon__icon {
+  animation: desktop-icon-object-spin 0.78s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.desktop-icon:hover .desktop-icon__scan,
+.desktop-icon:focus-visible .desktop-icon__scan {
+  animation: desktop-icon-scan 0.85s ease-in-out;
+}
+
+.desktop-icon:hover .desktop-icon__copy strong,
+.desktop-icon:focus-visible .desktop-icon__copy strong {
+  color: var(--icon-accent);
+  text-shadow: 0 0 7px var(--icon-glow);
+}
+
+@keyframes desktop-icon-float {
+  0%,
+  100% {
+    transform: translateY(0) rotateZ(-1deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotateZ(1deg);
+  }
+}
+
+@keyframes desktop-icon-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes desktop-icon-orbit-reverse {
+  from {
+    transform: rotate(45deg);
+  }
+
+  to {
+    transform: rotate(-315deg);
+  }
+}
+
+@keyframes desktop-icon-object-spin {
+  0% {
+    transform: translateY(0) rotateY(0deg) scale(1);
+  }
+
+  45% {
+    transform: translateY(-3px) rotateY(185deg) scale(1.14);
+  }
+
+  100% {
+    transform: translateY(0) rotateY(360deg) scale(1);
+  }
+}
+
+@keyframes desktop-icon-scan {
+  0% {
+    transform: translateY(-21px);
+    opacity: 0;
+  }
+
+  18%,
+  82% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: translateY(21px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .desktop-icon {
+    width: 94px;
+    min-height: 102px;
+  }
+
+  .desktop-icon__stage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .desktop-icon__copy strong {
+    max-width: 86px;
+    font-size: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktop-icon__orbit,
+  .desktop-icon__icon {
+    animation: none;
+  }
+}

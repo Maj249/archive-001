@@ -1,0 +1,694 @@
+.binary-mark {
+  --binary-x: 0;
+  --binary-y: 0;
+  --binary-light-x: 50%;
+  --binary-light-y: 50%;
+
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 62px minmax(0, 1fr) 48px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at var(--binary-light-x) var(--binary-light-y), rgba(34, 123, 67, 0.13), transparent 28%),
+    radial-gradient(circle at 50% 50%, rgba(65, 191, 255, 0.055), transparent 52%),
+    #020302;
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  isolation: isolate;
+}
+
+.binary-mark::before,
+.binary-mark::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.binary-mark::before {
+  z-index: 1;
+  background:
+    linear-gradient(rgba(82, 255, 111, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 191, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle, #000, transparent 78%);
+}
+
+.binary-mark::after {
+  z-index: 30;
+  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.82);
+}
+
+.binary-mark__header,
+.binary-mark__footer {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  border-color: rgba(82, 255, 111, 0.15);
+  background: rgba(2, 4, 2, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.binary-mark__header {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.binary-mark__header > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.binary-mark__header span,
+.binary-mark__footer span {
+  color: rgba(82, 255, 111, 0.46);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+
+.binary-mark__header strong {
+  color: var(--text-bright);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+
+.binary-mark__status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--green);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.binary-mark__status i {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  box-shadow: var(--green-glow);
+  animation: binary-status 1.2s steps(1) infinite;
+}
+
+.binary-mark__layout {
+  position: relative;
+  z-index: 10;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(125px, 0.22fr) minmax(0, 1fr) minmax(125px, 0.22fr);
+  align-items: stretch;
+}
+
+.binary-mark__rail {
+  position: relative;
+  z-index: 12;
+  align-self: center;
+  margin: 22px;
+  border: 1px solid rgba(82, 255, 111, 0.12);
+  background: rgba(2, 5, 3, 0.62);
+}
+
+.binary-mark__rail > header {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(82, 255, 111, 0.12);
+}
+
+.binary-mark__rail header span {
+  color: rgba(82, 255, 111, 0.64);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.binary-mark__rail header i {
+  width: 4px;
+  height: 4px;
+  background: var(--green);
+  box-shadow: var(--green-glow);
+}
+
+.binary-mark__rail > div {
+  padding: 12px 10px;
+}
+
+.binary-mark__rail p {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 7px;
+  margin: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(82, 255, 111, 0.06);
+  color: rgba(255, 240, 179, 0.46);
+  font-size: 6px;
+  line-height: 1.4;
+}
+
+.binary-mark__rail p span {
+  color: rgba(65, 191, 255, 0.45);
+}
+
+.binary-mark__rail--right {
+  text-align: right;
+}
+
+.binary-mark__rail--right p {
+  grid-template-columns: 1fr 24px;
+}
+
+.binary-mark__rail--right p span {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.binary-mark__rail > footer {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border-top: 1px solid rgba(82, 255, 111, 0.1);
+}
+
+.binary-mark__rail footer span {
+  width: 4px;
+  height: 11px;
+  background: rgba(82, 255, 111, 0.2);
+  animation: binary-level 1.3s ease-in-out infinite alternate;
+}
+
+.binary-mark__rail footer span:nth-child(2) {
+  animation-delay: -0.2s;
+}
+
+.binary-mark__rail footer span:nth-child(3) {
+  animation-delay: -0.55s;
+}
+
+.binary-mark__rail footer span:nth-child(4) {
+  animation-delay: -0.8s;
+}
+
+.binary-mark__rail footer span:nth-child(5) {
+  animation-delay: -0.35s;
+}
+
+.binary-mark__rail footer span:nth-child(6) {
+  animation-delay: -0.7s;
+}
+
+.binary-mark__viewport {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+}
+
+.binary-mark__coordinates {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  gap: 14px;
+  color: rgba(255, 174, 36, 0.34);
+  font-size: 6px;
+  letter-spacing: 0.08em;
+}
+
+.binary-mark__core {
+  position: relative;
+  width: min(56vw, 590px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  transform-style: preserve-3d;
+  transform:
+    rotateX(calc(var(--binary-y) * -12deg))
+    rotateY(calc(var(--binary-x) * 15deg));
+  transition: transform 0.14s ease-out;
+}
+
+.binary-mark__core::before {
+  content: "";
+  position: absolute;
+  inset: 17%;
+  background: radial-gradient(circle, rgba(82, 255, 111, 0.12), transparent 65%);
+  filter: blur(12px);
+  transform: translateZ(-50px);
+}
+
+.binary-mark__halo {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.binary-mark__halo--outer {
+  inset: 4%;
+  border: 1px dashed rgba(82, 255, 111, 0.22);
+  animation: binary-orbit 18s linear infinite;
+}
+
+.binary-mark__halo--middle {
+  inset: 13%;
+  border-top: 1px solid rgba(65, 191, 255, 0.5);
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid rgba(82, 255, 111, 0.36);
+  border-left: 1px solid transparent;
+  animation: binary-orbit-reverse 9s linear infinite;
+}
+
+.binary-mark__halo--inner {
+  inset: 25%;
+  border: 1px solid rgba(255, 174, 36, 0.2);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  animation: binary-orbit 7s linear infinite;
+}
+
+.binary-mark__axis {
+  position: absolute;
+  background: rgba(82, 255, 111, 0.16);
+  pointer-events: none;
+}
+
+.binary-mark__axis--horizontal {
+  right: 3%;
+  left: 3%;
+  height: 1px;
+}
+
+.binary-mark__axis--vertical {
+  top: 3%;
+  bottom: 3%;
+  width: 1px;
+}
+
+.binary-mark__layers {
+  position: absolute;
+  inset: 19%;
+  display: grid;
+  place-items: center;
+  transform-style: preserve-3d;
+}
+
+.binary-mark__glyph {
+  position: absolute;
+  inset: 19%;
+  width: 62%;
+  height: 62%;
+  z-index: 8;
+  overflow: visible;
+  fill: rgba(82, 255, 111, 0.11);
+  stroke: #70ff89;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+  filter:
+    drop-shadow(0 0 5px rgba(82, 255, 111, 0.8))
+    drop-shadow(0 0 20px rgba(82, 255, 111, 0.25));
+  transform: translateZ(35px);
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.3s ease,
+    filter 0.3s ease;
+  animation: binary-glyph-breathe 4.8s ease-in-out infinite;
+}
+
+.binary-mark__layers .binary-mark__glyph--ghost {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.binary-mark__glyph--ghost {
+  z-index: calc(7 - var(--glyph-layer));
+  opacity: 0.12;
+  fill: transparent;
+  stroke: var(--green);
+  stroke-width: 2;
+  transform:
+    translate3d(
+      calc(var(--glyph-layer) * -4px),
+      calc(var(--glyph-layer) * 4px),
+      calc(var(--glyph-layer) * -18px)
+    );
+  animation: none;
+}
+
+.binary-mark__glyph-cut {
+  fill: none;
+  stroke: rgba(65, 191, 255, 0.8);
+  stroke-width: 2;
+}
+
+.binary-mark__scanner {
+  position: absolute;
+  z-index: 20;
+  left: 23%;
+  right: 23%;
+  height: 2px;
+  opacity: 0.66;
+  background: var(--green);
+  box-shadow:
+    0 0 8px rgba(82, 255, 111, 0.8),
+    0 0 28px rgba(82, 255, 111, 0.42);
+  animation: binary-scan 3.4s ease-in-out infinite;
+}
+
+.binary-mark__core-label {
+  position: absolute;
+  right: 8%;
+  bottom: 16%;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: baseline;
+  gap: 6px;
+  color: rgba(82, 255, 111, 0.42);
+}
+
+.binary-mark__core-label small {
+  font-size: 5px;
+  letter-spacing: 0.08em;
+}
+
+.binary-mark__core-label strong {
+  color: var(--green);
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.binary-mark__instruction {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  font-size: 6px;
+  letter-spacing: 0.11em;
+}
+
+.binary-mark__instruction span {
+  color: rgba(255, 174, 36, 0.4);
+}
+
+.binary-mark__instruction strong {
+  color: rgba(82, 255, 111, 0.68);
+  font-weight: 400;
+}
+
+.binary-mark__core:hover .binary-mark__glyph {
+  filter:
+    drop-shadow(0 0 6px rgba(82, 255, 111, 0.92))
+    drop-shadow(0 0 34px rgba(82, 255, 111, 0.45));
+}
+
+.binary-mark__core:hover .binary-mark__glyph--ghost {
+  transform:
+    translate3d(
+      calc(var(--glyph-layer) * -7px),
+      calc(var(--glyph-layer) * 7px),
+      calc(var(--glyph-layer) * -28px)
+    );
+}
+
+.binary-mark__tunnel {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: grid;
+  place-items: center;
+  perspective: 650px;
+  opacity: 0.34;
+  pointer-events: none;
+}
+
+.binary-mark__tunnel div {
+  position: absolute;
+  width: 72vw;
+  height: 72vh;
+  border: 1px solid rgba(65, 191, 255, 0.12);
+  transform: translateZ(calc(var(--tunnel-layer, 0) * -140px));
+}
+
+.binary-mark__tunnel div:nth-child(1) {
+  --tunnel-layer: 0;
+}
+
+.binary-mark__tunnel div:nth-child(2) {
+  --tunnel-layer: 1;
+  width: 58vw;
+  height: 58vh;
+}
+
+.binary-mark__tunnel div:nth-child(3) {
+  --tunnel-layer: 2;
+  width: 44vw;
+  height: 44vh;
+}
+
+.binary-mark__footer {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+.binary-mark__footer > div {
+  display: flex;
+  gap: 5px;
+}
+
+.binary-mark__footer i {
+  width: 26px;
+  height: 3px;
+  background: rgba(82, 255, 111, 0.12);
+}
+
+.binary-mark__footer i:nth-child(-n + 3) {
+  background: rgba(82, 255, 111, 0.56);
+  box-shadow: 0 0 6px rgba(82, 255, 111, 0.2);
+}
+
+.binary-mark__scanlines,
+.binary-mark__grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.binary-mark__scanlines {
+  z-index: 28;
+  opacity: 0.1;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(255, 255, 255, 0.1) 4px);
+}
+
+.binary-mark__grain {
+  z-index: 29;
+  inset: -50%;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: binary-grain 0.25s steps(2) infinite;
+}
+
+.binary-mark--overclocked .binary-mark__status {
+  color: var(--amber);
+}
+
+.binary-mark--overclocked .binary-mark__status i {
+  background: var(--amber);
+  box-shadow: 0 0 9px rgba(255, 174, 36, 0.72);
+}
+
+.binary-mark--overclocked .binary-mark__core {
+  animation: binary-overclock-shake 0.18s steps(2) infinite;
+}
+
+.binary-mark--overclocked .binary-mark__halo--outer {
+  border-color: rgba(255, 174, 36, 0.55);
+  animation-duration: 2.8s;
+}
+
+.binary-mark--overclocked .binary-mark__halo--middle {
+  animation-duration: 1.7s;
+}
+
+.binary-mark--overclocked .binary-mark__glyph {
+  fill: rgba(82, 255, 111, 0.2);
+  stroke-width: 6;
+  animation: binary-overclock-glyph 0.8s steps(2) infinite;
+}
+
+.binary-mark--overclocked .binary-mark__glyph--ghost {
+  opacity: 0.32;
+  stroke: var(--amber);
+  transform:
+    translate3d(
+      calc(var(--glyph-layer) * -10px),
+      calc(var(--glyph-layer) * 8px),
+      calc(var(--glyph-layer) * -35px)
+    );
+}
+
+@keyframes binary-status {
+  50% {
+    opacity: 0.18;
+  }
+}
+
+@keyframes binary-level {
+  to {
+    height: 4px;
+    opacity: 0.3;
+  }
+}
+
+@keyframes binary-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes binary-orbit-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes binary-glyph-breathe {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translateZ(35px) scale(0.99);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateZ(52px) scale(1.025);
+  }
+}
+
+@keyframes binary-scan {
+  0%,
+  100% {
+    transform: translateY(-112px);
+    opacity: 0;
+  }
+
+  16%,
+  84% {
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: translateY(112px);
+  }
+}
+
+@keyframes binary-grain {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(2%, -3%);
+  }
+}
+
+@keyframes binary-overclock-shake {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 1px -1px;
+  }
+}
+
+@keyframes binary-overclock-glyph {
+  0%,
+  100% {
+    filter:
+      drop-shadow(4px 0 0 rgba(65, 191, 255, 0.45))
+      drop-shadow(-4px 0 0 rgba(255, 174, 36, 0.42))
+      drop-shadow(0 0 26px rgba(82, 255, 111, 0.5));
+  }
+
+  50% {
+    filter:
+      drop-shadow(-3px 0 0 rgba(65, 191, 255, 0.55))
+      drop-shadow(3px 0 0 rgba(255, 174, 36, 0.5))
+      drop-shadow(0 0 34px rgba(82, 255, 111, 0.68));
+  }
+}
+
+@media (max-width: 880px) {
+  .binary-mark__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .binary-mark__rail {
+    display: none;
+  }
+
+  .binary-mark__core {
+    width: min(82vw, 590px);
+  }
+}
+
+@media (max-width: 600px) {
+  .binary-mark {
+    grid-template-rows: 54px minmax(0, 1fr) 42px;
+  }
+
+  .binary-mark__header,
+  .binary-mark__footer {
+    padding: 0 14px;
+  }
+
+  .binary-mark__header > div:first-child span,
+  .binary-mark__footer span:first-child {
+    display: none;
+  }
+
+  .binary-mark__core {
+    width: 96vw;
+  }
+
+  .binary-mark__coordinates {
+    top: 14px;
+    left: 14px;
+  }
+
+  .binary-mark__instruction {
+    bottom: 9px;
+  }
+
+  .binary-mark__footer i {
+    width: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binary-mark__status i,
+  .binary-mark__rail footer span,
+  .binary-mark__halo,
+  .binary-mark__glyph,
+  .binary-mark__scanner,
+  .binary-mark__grain,
+  .binary-mark--overclocked .binary-mark__core {
+    animation: none;
+  }
+}

@@ -1,0 +1,22 @@
+.pixel-icon {
+  width: 44px;
+  height: 44px;
+  overflow: visible;
+  fill: currentColor;
+  image-rendering: pixelated;
+  filter:
+    drop-shadow(2px 0 0 rgba(0, 0, 0, 0.55))
+    drop-shadow(0 2px 0 rgba(0, 0, 0, 0.55));
+}
+
+.pixel-icon__dark {
+  fill: color-mix(in srgb, currentColor 42%, #050505);
+}
+
+.pixel-icon__light {
+  fill: color-mix(in srgb, currentColor 62%, white);
+}
+
+.pixel-icon__edge {
+  fill: #050505;
+}

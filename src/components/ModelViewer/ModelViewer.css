@@ -1,0 +1,186 @@
+.model-viewer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid rgba(168, 139, 255, 0.26);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(140, 104, 255, 0.18), transparent 42%),
+    linear-gradient(rgba(168, 139, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 139, 255, 0.035) 1px, transparent 1px),
+    #050308;
+  background-size: auto, 18px 18px, 18px 18px, auto;
+  isolation: isolate;
+}
+
+.model-viewer::before,
+.model-viewer::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.model-viewer::before {
+  inset: 0;
+  z-index: 7;
+  opacity: 0.12;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.09) 4px
+  );
+}
+
+.model-viewer::after {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  height: 34%;
+  background: linear-gradient(to top, rgba(26, 9, 55, 0.72), transparent);
+}
+
+.model-viewer__mount {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.model-viewer__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+
+.model-viewer__canvas:active {
+  cursor: grabbing;
+}
+
+.model-viewer__header,
+.model-viewer__footer {
+  position: absolute;
+  right: 13px;
+  left: 13px;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: 0.08em;
+}
+
+.model-viewer__header {
+  top: 12px;
+}
+
+.model-viewer__header span,
+.model-viewer__footer span {
+  color: rgba(193, 175, 255, 0.5);
+  font-size: 6px;
+}
+
+.model-viewer__header strong {
+  color: #bca5ff;
+  font-size: 6px;
+  font-weight: 500;
+  text-shadow: 0 0 8px rgba(168, 139, 255, 0.72);
+}
+
+.model-viewer__footer {
+  bottom: 11px;
+  gap: 8px;
+}
+
+.model-viewer__progress {
+  position: absolute;
+  right: 13px;
+  bottom: 28px;
+  left: 13px;
+  z-index: 8;
+  height: 2px;
+  overflow: hidden;
+  background: rgba(168, 139, 255, 0.12);
+  transition: opacity 0.3s ease;
+}
+
+.model-viewer[data-model-status="MODEL ONLINE"] .model-viewer__progress {
+  opacity: 0;
+}
+
+.model-viewer__progress span {
+  display: block;
+  height: 100%;
+  background: #a88bff;
+  box-shadow: 0 0 9px rgba(168, 139, 255, 0.86);
+  transition: width 0.18s ease;
+}
+
+.model-viewer__corners {
+  position: absolute;
+  inset: 8px;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.model-viewer__corners i {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(190, 166, 255, 0.74);
+}
+
+.model-viewer__corners i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.model-viewer__corners i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-top: 1px solid;
+  border-right: 1px solid;
+}
+
+.model-viewer__corners i:nth-child(3) {
+  right: 0;
+  bottom: 0;
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.model-viewer__corners i:nth-child(4) {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+}
+
+@media (max-width: 700px) {
+  .model-viewer {
+    min-height: 250px;
+  }
+
+  .model-viewer__header span,
+  .model-viewer__header strong,
+  .model-viewer__footer span {
+    font-size: 7px;
+  }
+
+  .model-viewer__footer span:nth-child(2) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .model-viewer__progress,
+  .model-viewer__progress span {
+    transition: none;
+  }
+}

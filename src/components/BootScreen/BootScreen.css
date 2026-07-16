@@ -1,0 +1,848 @@
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 48% 44%, rgba(255, 174, 36, 0.055), transparent 40%),
+    #030201;
+  color: #ffb52d;
+  font-family: "IBM Plex Mono", monospace;
+  isolation: isolate;
+}
+
+.boot-screen__shell {
+  position: relative;
+  z-index: 4;
+  width: min(1680px, calc(100vw - 36px));
+  height: min(930px, calc(100vh - 36px));
+  display: grid;
+  grid-template-rows: 66px minmax(0, 1fr) 44px;
+  border: 1px solid rgba(255, 174, 36, 0.34);
+  background:
+    linear-gradient(rgba(255, 174, 36, 0.014), transparent 34%),
+    rgba(7, 4, 2, 0.94);
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.72),
+    inset 0 0 100px rgba(255, 174, 36, 0.015);
+}
+
+.boot-screen__topbar,
+.boot-screen__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  border-color: rgba(255, 174, 36, 0.22);
+  background: rgba(255, 174, 36, 0.015);
+}
+
+.boot-screen__topbar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
+
+.boot-screen__topbar > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.boot-screen__topbar span,
+.boot-screen__footer span,
+.boot-screen__footer strong {
+  color: rgba(255, 174, 36, 0.44);
+  font-size: 7px;
+  letter-spacing: 0.13em;
+}
+
+.boot-screen__topbar strong {
+  color: rgba(255, 224, 131, 0.9);
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+
+.boot-screen__top-meta {
+  display: flex;
+  gap: 24px;
+}
+
+.boot-screen__layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+.boot-screen__identity,
+.boot-screen__system {
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(30px, 4vw, 52px);
+}
+
+.boot-screen__identity {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 30px;
+  border-right: 1px solid rgba(255, 174, 36, 0.22);
+}
+
+.boot-screen__title p {
+  margin: 0 0 10px;
+  color: rgba(255, 174, 36, 0.56);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.boot-screen__title h1,
+.boot-screen__title h2 {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.075em;
+  text-shadow:
+    0 0 12px rgba(255, 174, 36, 0.46),
+    0 7px 0 rgba(118, 55, 4, 0.54);
+}
+
+.boot-screen__title h1 {
+  color: #ffad21;
+  font-size: clamp(72px, 11vw, 150px);
+  line-height: 0.74;
+}
+
+.boot-screen__title h2 {
+  margin-top: 22px;
+  color: #ffe38c;
+  font-size: clamp(46px, 6.2vw, 82px);
+  line-height: 0.78;
+}
+
+.boot-screen__mark-panel {
+  position: relative;
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 174, 36, 0.2);
+  background:
+    linear-gradient(rgba(255, 174, 36, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 174, 36, 0.025) 1px, transparent 1px),
+    rgba(3, 3, 2, 0.5);
+  background-size: 28px 28px;
+  perspective: 800px;
+}
+
+.boot-screen__mark-panel::before {
+  content: "";
+  position: absolute;
+  right: -12%;
+  bottom: -68%;
+  left: -12%;
+  height: 86%;
+  background-image:
+    linear-gradient(rgba(255, 174, 36, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 174, 36, 0.14) 1px, transparent 1px);
+  background-size: 34px 34px;
+  transform: perspective(360px) rotateX(64deg);
+  transform-origin: top;
+  mask-image: linear-gradient(to bottom, #000, transparent 78%);
+}
+
+.boot-screen__mark-stage {
+  position: relative;
+  width: min(34vw, 330px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transform-style: preserve-3d;
+  animation: boot-stage-float 4.4s ease-in-out infinite;
+}
+
+.boot-screen__orbit {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+}
+
+.boot-screen__orbit--outer {
+  inset: 2%;
+  border: 1px dashed rgba(255, 174, 36, 0.28);
+  animation: boot-orbit 11s linear infinite;
+}
+
+.boot-screen__orbit--middle {
+  inset: 11%;
+  border-top: 1px solid rgba(255, 225, 139, 0.72);
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid rgba(255, 174, 36, 0.44);
+  border-left: 1px solid transparent;
+  animation: boot-orbit-reverse 6s linear infinite;
+}
+
+.boot-screen__orbit--inner {
+  inset: 22%;
+  border: 1px solid rgba(255, 174, 36, 0.24);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  animation: boot-orbit 4.6s linear infinite;
+}
+
+.boot-screen__axis {
+  position: absolute;
+  background: rgba(255, 174, 36, 0.15);
+}
+
+.boot-screen__axis--x {
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+
+.boot-screen__axis--y {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+.boot-screen__glyph-stack {
+  position: absolute;
+  inset: 23%;
+  transform-style: preserve-3d;
+}
+
+.boot-screen__glyph {
+  position: absolute;
+  inset: 23%;
+  width: 54%;
+  height: 54%;
+  z-index: 7;
+  overflow: visible;
+  fill: rgba(255, 174, 36, 0.11);
+  stroke: #ffb52d;
+  stroke-width: 4;
+  filter:
+    drop-shadow(0 0 5px rgba(255, 174, 36, 0.7))
+    drop-shadow(0 0 20px rgba(255, 174, 36, 0.25));
+  transform-style: preserve-3d;
+  animation: boot-glyph-spin 5.2s linear infinite;
+  transition:
+    stroke 0.45s ease,
+    fill 0.45s ease,
+    filter 0.45s ease;
+}
+
+.boot-screen__glyph-stack .boot-screen__glyph {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.boot-screen__glyph--ghost {
+  z-index: calc(6 - var(--boot-layer));
+  opacity: 0.13;
+  fill: transparent;
+  stroke-width: 2;
+  animation: boot-ghost-spin 5.2s linear infinite;
+  transform: translate3d(
+    calc(var(--boot-layer) * -5px),
+    calc(var(--boot-layer) * 4px),
+    calc(var(--boot-layer) * -22px)
+  );
+}
+
+.boot-screen__glyph-cut {
+  fill: none;
+  stroke: rgba(255, 231, 160, 0.72);
+  stroke-width: 2;
+}
+
+.boot-screen__mark-scan {
+  position: absolute;
+  z-index: 14;
+  right: 25%;
+  left: 25%;
+  height: 1px;
+  background: #ffde7a;
+  box-shadow: 0 0 8px rgba(255, 174, 36, 0.82);
+  animation: boot-mark-scan 2.8s ease-in-out infinite;
+}
+
+.boot-screen__mark-data {
+  position: absolute;
+  bottom: 12px;
+  left: 14px;
+  display: flex;
+  gap: 14px;
+  color: rgba(255, 174, 36, 0.4);
+  font-size: 6px;
+  letter-spacing: 0.08em;
+}
+
+.boot-screen__mark-target {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(255, 174, 36, 0.32);
+  border-radius: 50%;
+}
+
+.boot-screen__mark-target i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(255, 174, 36, 0.4);
+  transform: translate(-50%, -50%);
+}
+
+.boot-screen__mark-target i:first-child {
+  width: 100%;
+  height: 1px;
+}
+
+.boot-screen__mark-target i:last-child {
+  width: 1px;
+  height: 100%;
+}
+
+.boot-screen__system {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.boot-screen__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.boot-screen__card {
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 174, 36, 0.22);
+}
+
+.boot-screen__card + .boot-screen__card {
+  border-left: 0;
+}
+
+.boot-screen__card span {
+  color: rgba(255, 174, 36, 0.42);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.boot-screen__card strong {
+  color: #ffe078;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.boot-screen__pulse {
+  min-height: 118px;
+  display: grid;
+  place-items: center;
+  padding: 14px 0;
+  border: 1px solid rgba(255, 174, 36, 0.18);
+  overflow: hidden;
+}
+
+.boot-screen__pulse svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 5px rgba(255, 174, 36, 0.52));
+}
+
+.boot-screen__pulse path {
+  fill: none;
+  stroke: #ffb52d;
+  stroke-width: 3;
+  stroke-linejoin: miter;
+  stroke-dasharray: 920;
+  stroke-dashoffset: 920;
+  animation: boot-pulse-draw 2.6s linear infinite;
+}
+
+.boot-screen__progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  color: rgba(255, 174, 36, 0.58);
+  font-size: 7px;
+  letter-spacing: 0.09em;
+}
+
+.boot-screen__progress-label strong {
+  color: #ffe078;
+}
+
+.boot-screen__progress-track {
+  height: 14px;
+  padding: 2px;
+  border: 1px solid rgba(255, 174, 36, 0.28);
+  background: #060402;
+  overflow: hidden;
+}
+
+.boot-screen__progress-track span {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #ffb52d 0, #ffb52d 18px, #ffe078 18px, #ffe078 24px, transparent 24px, transparent 28px);
+  box-shadow: 0 0 10px rgba(255, 174, 36, 0.3);
+  transition: width 0.16s ease;
+}
+
+.boot-screen__log {
+  border-top: 1px solid rgba(255, 174, 36, 0.15);
+}
+
+.boot-screen__log-row {
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 174, 36, 0.11);
+  color: rgba(255, 174, 36, 0.25);
+  font-size: 7px;
+  letter-spacing: 0.07em;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.boot-screen__log-row p {
+  margin: 0;
+}
+
+.boot-screen__log-row strong {
+  font-weight: 500;
+}
+
+.boot-screen__log-row--active {
+  color: #ffb52d;
+  background: rgba(255, 174, 36, 0.025);
+}
+
+.boot-screen__log-row--complete {
+  color: rgba(255, 202, 75, 0.7);
+}
+
+.boot-screen__log-row--complete strong {
+  color: #ffe078;
+}
+
+.boot-screen__enter-zone {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.boot-screen__enter {
+  position: relative;
+  min-height: 58px;
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 18px;
+  padding: 0 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 174, 36, 0.22);
+  background: rgba(255, 174, 36, 0.015);
+  color: rgba(255, 174, 36, 0.3);
+  font: inherit;
+  text-align: left;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.boot-screen__enter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-105%);
+  background: linear-gradient(90deg, transparent, rgba(82, 255, 111, 0.15), transparent);
+}
+
+.boot-screen__enter span {
+  font-size: 7px;
+  letter-spacing: 0.09em;
+}
+
+.boot-screen__enter strong {
+  font-size: 10px;
+  letter-spacing: 0.11em;
+}
+
+.boot-screen__enter i {
+  font-size: 18px;
+  font-style: normal;
+}
+
+.boot-screen__enter:disabled {
+  opacity: 0.54;
+}
+
+.boot-screen__enter-zone > small {
+  color: rgba(255, 174, 36, 0.32);
+  font-size: 6px;
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+}
+
+.boot-screen--ready .boot-screen__glyph {
+  fill: rgba(82, 255, 111, 0.12);
+  stroke: var(--green);
+  filter:
+    drop-shadow(0 0 5px rgba(82, 255, 111, 0.8))
+    drop-shadow(0 0 24px rgba(82, 255, 111, 0.3));
+}
+
+.boot-screen--ready .boot-screen__glyph-cut,
+.boot-screen--ready .boot-screen__mark-scan {
+  stroke: rgba(65, 191, 255, 0.8);
+  background: var(--green);
+}
+
+.boot-screen--ready .boot-screen__enter {
+  border-color: rgba(82, 255, 111, 0.58);
+  background: rgba(82, 255, 111, 0.035);
+  color: var(--green);
+  box-shadow:
+    inset 4px 0 0 var(--green),
+    0 0 18px rgba(82, 255, 111, 0.06);
+}
+
+.boot-screen--ready .boot-screen__enter::before {
+  animation: boot-enter-sweep 2.2s ease-in-out infinite;
+}
+
+.boot-screen--ready .boot-screen__enter:hover,
+.boot-screen--ready .boot-screen__enter:focus-visible {
+  background: var(--green);
+  color: #030303;
+  outline: 0;
+}
+
+.boot-screen--ready .boot-screen__enter-zone > small,
+.boot-screen--ready .boot-screen__footer strong {
+  color: rgba(82, 255, 111, 0.68);
+}
+
+.boot-screen--ready {
+  cursor: pointer;
+}
+
+.boot-screen__ready-prompt {
+  position: fixed;
+  right: 7vw;
+  bottom: 8vh;
+  z-index: 20;
+  min-width: min(620px, 86vw);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  border: 1px solid rgba(82, 255, 111, 0.72);
+  background:
+    linear-gradient(90deg, rgba(82, 255, 111, 0.12), transparent 60%),
+    rgba(2, 8, 4, 0.94);
+  box-shadow:
+    inset 5px 0 0 var(--green),
+    0 0 28px rgba(82, 255, 111, 0.14),
+    0 18px 45px rgba(0, 0, 0, 0.48);
+  color: var(--green);
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.boot-screen__ready-prompt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(82, 255, 111, 0.18), transparent);
+  transform: translateX(-110%);
+  animation: boot-ready-sweep 2s ease-in-out infinite;
+}
+
+.boot-screen__ready-prompt span,
+.boot-screen__ready-prompt small {
+  position: relative;
+  z-index: 1;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.boot-screen__ready-prompt strong {
+  position: relative;
+  z-index: 1;
+  color: #d8ffe0;
+  font-family: "Inter", sans-serif;
+  font-size: clamp(22px, 3vw, 44px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(82, 255, 111, 0.5);
+}
+
+.boot-screen__ready-prompt small {
+  color: rgba(82, 255, 111, 0.65);
+}
+
+.boot-screen__footer {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+.boot-screen__scanlines,
+.boot-screen__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.boot-screen__scanlines {
+  z-index: 9;
+  opacity: 0.09;
+  background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, rgba(255, 255, 255, 0.1) 4px);
+}
+
+.boot-screen__noise {
+  z-index: 8;
+  inset: -50%;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: boot-noise 0.25s steps(2) infinite;
+}
+
+@keyframes boot-stage-float {
+  0%,
+  100% {
+    transform: translateY(0) rotateX(-3deg);
+  }
+
+  50% {
+    transform: translateY(-7px) rotateX(3deg);
+  }
+}
+
+@keyframes boot-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes boot-orbit-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes boot-glyph-spin {
+  from {
+    transform: rotateY(0deg) translateZ(32px);
+  }
+
+  to {
+    transform: rotateY(360deg) translateZ(32px);
+  }
+}
+
+@keyframes boot-ghost-spin {
+  from {
+    rotate: y 0deg;
+  }
+
+  to {
+    rotate: y 360deg;
+  }
+}
+
+@keyframes boot-mark-scan {
+  0%,
+  100% {
+    transform: translateY(-76px);
+    opacity: 0;
+  }
+
+  16%,
+  84% {
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateY(76px);
+  }
+}
+
+@keyframes boot-pulse-draw {
+  0% {
+    stroke-dashoffset: 920;
+  }
+
+  70%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes boot-enter-sweep {
+  0%,
+  25% {
+    transform: translateX(-105%);
+  }
+
+  75%,
+  100% {
+    transform: translateX(105%);
+  }
+}
+
+@keyframes boot-ready-sweep {
+  0%,
+  25% {
+    transform: translateX(-110%);
+  }
+
+  75%,
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes boot-noise {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(3%, -2%);
+  }
+}
+
+@media (max-width: 980px) {
+  .boot-screen {
+    position: absolute;
+    min-height: 100vh;
+    padding: 0;
+    overflow-y: auto;
+  }
+
+  .boot-screen__shell {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    grid-template-rows: 58px auto 42px;
+    border: 0;
+  }
+
+  .boot-screen__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .boot-screen__identity {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 174, 36, 0.22);
+  }
+
+  .boot-screen__mark-stage {
+    width: min(58vw, 330px);
+  }
+}
+
+@media (max-width: 600px) {
+  .boot-screen__topbar,
+  .boot-screen__footer {
+    padding: 0 14px;
+  }
+
+  .boot-screen__top-meta span:not(:last-child),
+  .boot-screen__footer span:first-child {
+    display: none;
+  }
+
+  .boot-screen__identity,
+  .boot-screen__system {
+    padding: 24px 16px;
+  }
+
+  .boot-screen__title h1 {
+    font-size: 88px;
+  }
+
+  .boot-screen__title h2 {
+    font-size: 50px;
+  }
+
+  .boot-screen__mark-data {
+    gap: 8px;
+  }
+
+  .boot-screen__mark-data span:nth-child(2) {
+    display: none;
+  }
+
+  .boot-screen__card {
+    min-height: 62px;
+    padding: 0 10px;
+  }
+
+  .boot-screen__pulse {
+    min-height: 90px;
+  }
+
+  .boot-screen__enter {
+    grid-template-columns: 1fr auto;
+  }
+
+  .boot-screen__enter > span {
+    display: none;
+  }
+
+  .boot-screen__ready-prompt {
+    right: 12px;
+    bottom: 58px;
+    left: 12px;
+    min-width: 0;
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .boot-screen__ready-prompt strong {
+    font-size: 27px;
+  }
+
+  .boot-screen__ready-prompt span,
+  .boot-screen__ready-prompt small {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen__mark-stage,
+  .boot-screen__orbit,
+  .boot-screen__glyph,
+  .boot-screen__mark-scan,
+  .boot-screen__pulse path,
+  .boot-screen__enter::before,
+  .boot-screen__ready-prompt::before,
+  .boot-screen__noise {
+    animation: none;
+  }
+}

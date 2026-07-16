@@ -1,0 +1,24 @@
+/* The sketchbook deliberately shares the Photography gallery system. */
+@import "../Photography/Photography.css";
+@import "../Photography/PhotographyLightbox.css";
+
+.photography-app--sketchbooks .photography-card {
+  border-color: rgba(169, 149, 255, 0.2);
+}
+
+.photography-app--sketchbooks .photography-card:hover,
+.photography-app--sketchbooks .photography-card:focus-visible {
+  border-color: rgba(169, 149, 255, 0.78);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.46),
+    0 0 20px rgba(169, 149, 255, 0.1);
+}
+
+.photography-app--sketchbooks .photography-app__count {
+  border-left-color: rgba(169, 149, 255, 0.34);
+}
+
+.photography-app--sketchbooks .photography-app__count span,
+.photography-app--sketchbooks .photography-card > span {
+  color: rgba(197, 184, 255, 0.84);
+}

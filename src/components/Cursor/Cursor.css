@@ -1,0 +1,131 @@
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  [data-cursor],
+  [role="button"] {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor {
+  --cursor-color: #f6f2e8;
+  --cursor-signal: var(--green);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20000;
+  width: 24px;
+  height: 30px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  transform-origin: 2px 2px;
+  transition: opacity 0.14s ease;
+  will-change: transform;
+}
+
+.custom-cursor--visible {
+  opacity: 1;
+}
+
+.custom-cursor__arrow {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 30px;
+  overflow: visible;
+  filter: drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.72));
+  transition:
+    transform 0.14s ease,
+    filter 0.14s ease;
+}
+
+.custom-cursor__fill {
+  fill: var(--cursor-color);
+  transition: fill 0.14s ease;
+}
+
+.custom-cursor__stroke {
+  fill: none;
+  stroke: #050505;
+  stroke-width: 1.8;
+  stroke-linejoin: miter;
+}
+
+.custom-cursor__signal {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--cursor-signal);
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 7px color-mix(in srgb, var(--cursor-signal) 68%, transparent);
+  transform: scale(0.4);
+  transition:
+    opacity 0.14s ease,
+    transform 0.14s ease,
+    border-color 0.14s ease;
+}
+
+.custom-cursor--interactive {
+  --cursor-color: #eaffea;
+}
+
+.custom-cursor--interactive .custom-cursor__arrow {
+  transform: translate(-1px, -1px) scale(0.9);
+  filter:
+    drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.72))
+    drop-shadow(0 0 5px rgba(82, 255, 111, 0.3));
+}
+
+.custom-cursor--interactive .custom-cursor__signal {
+  opacity: 0.92;
+  transform: scale(1);
+}
+
+.custom-cursor--danger {
+  --cursor-color: #fff0ed;
+  --cursor-signal: #ff5147;
+}
+
+.custom-cursor--danger .custom-cursor__arrow {
+  filter:
+    drop-shadow(2px 3px 0 rgba(0, 0, 0, 0.72))
+    drop-shadow(0 0 6px rgba(255, 81, 71, 0.42));
+}
+
+.custom-cursor--text .custom-cursor__arrow {
+  opacity: 0.42;
+  transform: scale(0.72);
+}
+
+.custom-cursor--down .custom-cursor__arrow {
+  transform: scale(0.78);
+}
+
+.custom-cursor--down .custom-cursor__signal {
+  transform: scale(1.6);
+  opacity: 0.38;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-cursor,
+  .custom-cursor__arrow,
+  .custom-cursor__signal {
+    transition: none;
+  }
+}

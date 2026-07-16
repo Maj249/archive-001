@@ -1,0 +1,242 @@
+.photography-app {
+  min-height: 100%;
+  padding: 28px;
+
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+}
+
+.photography-app__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+
+  padding-bottom: 24px;
+}
+
+.photography-app__header p {
+  margin: 0 0 8px;
+
+  color: var(--amber);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.photography-app__header h2 {
+  margin: 0;
+
+  color: var(--text-bright);
+  font-family: Inter, sans-serif;
+  font-size: clamp(38px, 6vw, 72px);
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+.photography-app__count {
+  min-width: 138px;
+
+  padding-left: 18px;
+
+  border-left: 1px solid rgba(65, 191, 255, 0.3);
+}
+
+.photography-app__count strong,
+.photography-app__count span {
+  display: block;
+}
+
+.photography-app__count strong {
+  color: var(--text-bright);
+  font-family: Inter, sans-serif;
+  font-size: 38px;
+  line-height: 1;
+}
+
+.photography-app__count span {
+  margin-top: 5px;
+
+  color: rgba(65, 191, 255, 0.62);
+  font-size: 7px;
+  letter-spacing: 0.12em;
+}
+
+.photography-app__status {
+  min-height: 36px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 12px;
+  margin-bottom: 14px;
+
+  border-top: 1px solid rgba(65, 191, 255, 0.18);
+  border-bottom: 1px solid rgba(65, 191, 255, 0.18);
+
+  color: rgba(65, 191, 255, 0.52);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+}
+
+.photography-app__status i {
+  width: 5px;
+  height: 5px;
+
+  margin-left: auto;
+
+  background: var(--green);
+  box-shadow: var(--green-glow);
+
+  animation: photography-live 1.4s steps(1) infinite;
+}
+
+.photography-app__status strong {
+  color: var(--green);
+  font-size: 7px;
+  font-weight: 500;
+}
+
+.photography-app__gallery {
+  column-count: 3;
+  column-gap: 10px;
+}
+
+.photography-card {
+  position: relative;
+
+  width: 100%;
+
+  display: block;
+  break-inside: avoid;
+
+  padding: 0;
+  margin: 0 0 10px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(65, 191, 255, 0.18);
+
+  background: #030403;
+
+  color: var(--text-bright);
+  text-align: left;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.photography-card:hover,
+.photography-card:focus-visible {
+  z-index: 2;
+
+  border-color: rgba(124, 255, 107, 0.76);
+  outline: 0;
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.46),
+    0 0 18px rgba(124, 255, 107, 0.08);
+}
+
+.photography-card img {
+  width: 100%;
+  height: auto;
+
+  display: block;
+
+  filter: saturate(0.92) contrast(1.025);
+
+  transition:
+    filter 0.35s ease,
+    transform 0.35s ease;
+}
+
+.photography-card:hover img,
+.photography-card:focus-visible img {
+  filter: saturate(1.04) contrast(1.04);
+  transform: scale(1.015);
+}
+
+.photography-card::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  opacity: 0.12;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.1) 4px
+  );
+}
+
+.photography-card > span {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  z-index: 3;
+
+  padding: 5px 7px;
+
+  background: rgba(3, 4, 3, 0.82);
+
+  color: rgba(139, 223, 255, 0.82);
+  font-size: 6px;
+  letter-spacing: 0.1em;
+}
+
+@keyframes photography-live {
+  50% { opacity: 0.24; }
+}
+
+@media (max-width: 900px) {
+  .photography-app__gallery {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .photography-app {
+    padding: 16px;
+  }
+
+  .photography-app__header {
+    align-items: flex-start;
+  }
+
+  .photography-app__count {
+    min-width: 78px;
+  }
+
+  .photography-app__count strong {
+    font-size: 30px;
+  }
+
+  .photography-app__status strong {
+    display: none;
+  }
+
+  .photography-app__gallery {
+    column-count: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photography-app__status i {
+    animation: none;
+  }
+
+  .photography-card,
+  .photography-card img {
+    transition: none;
+  }
+}

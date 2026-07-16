@@ -1,0 +1,214 @@
+.terminal-app {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(98, 255, 84, 0.045), transparent 32%),
+    #030403;
+  color: #d9ffd4;
+  font-family: "IBM Plex Mono", monospace;
+  overflow: hidden;
+}
+
+.terminal-app__header {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 11px 20px;
+  border-bottom: 1px solid rgba(98, 255, 84, 0.2);
+  background: rgba(98, 255, 84, 0.018);
+}
+
+.terminal-app__header > div:first-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.terminal-app__header span,
+.terminal-app__status,
+.terminal-app__footer {
+  color: rgba(98, 255, 84, 0.48);
+  font-size: 8px;
+  letter-spacing: 0.13em;
+}
+
+.terminal-app__header strong {
+  color: #eaffdf;
+  font-size: 12px;
+  letter-spacing: 0.13em;
+}
+
+.terminal-app__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.terminal-app__status i {
+  width: 6px;
+  height: 6px;
+  display: block;
+  background: #62ff54;
+  box-shadow: 0 0 10px rgba(98, 255, 84, 0.72);
+  animation: terminal-status 1.35s steps(1) infinite;
+}
+
+.terminal-app__output {
+  min-height: 0;
+  padding: clamp(18px, 3vw, 34px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgba(98, 255, 84, 0.35) transparent;
+}
+
+.terminal-line {
+  margin: 0 0 8px;
+  color: rgba(217, 255, 212, 0.84);
+  font-size: clamp(10px, 1.2vw, 13px);
+  line-height: 1.5;
+  letter-spacing: 0.055em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.terminal-line--system,
+.terminal-line--heading {
+  color: #f4fff2;
+  font-weight: 700;
+}
+
+.terminal-line--muted {
+  color: rgba(98, 255, 84, 0.48);
+}
+
+.terminal-line--command {
+  margin-top: 18px;
+  color: #ffb52d;
+}
+
+.terminal-line--success {
+  color: #62ff54;
+  text-shadow: 0 0 7px rgba(98, 255, 84, 0.24);
+}
+
+.terminal-line--error {
+  color: #ff5b56;
+}
+
+.terminal-app__prompt {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 8px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+  color: #62ff54;
+  font-size: clamp(10px, 1.2vw, 13px);
+}
+
+.terminal-app__prompt label {
+  color: #ffb52d;
+  white-space: nowrap;
+}
+
+.terminal-app__prompt input {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #f4fff2;
+  caret-color: transparent;
+  font: inherit;
+}
+
+.terminal-app__prompt > span {
+  width: 8px;
+  height: 14px;
+  display: block;
+  background: #62ff54;
+  box-shadow: 0 0 8px rgba(98, 255, 84, 0.5);
+  animation: terminal-caret 0.8s steps(1) infinite;
+}
+
+.terminal-app__footer {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 18px;
+  border-top: 1px solid rgba(98, 255, 84, 0.18);
+}
+
+@keyframes terminal-status {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes terminal-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .terminal-app__header {
+    min-height: 46px;
+    padding: 8px 12px;
+  }
+
+  .terminal-app__header span,
+  .terminal-app__status {
+    font-size: 6px;
+  }
+
+  .terminal-app__header strong {
+    font-size: 10px;
+  }
+
+  .terminal-app__status {
+    font-size: 0;
+  }
+
+  .terminal-app__output {
+    padding: 14px 12px 22px;
+  }
+
+  .terminal-line,
+  .terminal-app__prompt {
+    font-size: 10px;
+  }
+
+  .terminal-app__prompt {
+    grid-template-columns: auto minmax(0, 1fr) 7px;
+    gap: 6px;
+  }
+
+  .terminal-app__prompt label {
+    font-size: 0;
+  }
+
+  .terminal-app__prompt label::after {
+    content: ">$";
+    font-size: 10px;
+  }
+
+  .terminal-app__footer span:nth-child(2) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-app__status i,
+  .terminal-app__prompt > span {
+    animation: none;
+  }
+}

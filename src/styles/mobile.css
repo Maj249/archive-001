@@ -1,0 +1,466 @@
+/* =========================================================
+   MAGI OS — MOBILE STABILITY PASS
+   Import this AFTER compatibility.css and readability.css.
+========================================================= */
+
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  :root {
+    --mobile-vh: 100dvh;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    overscroll-behavior-x: none;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Decorative desktop status pop-ups obscure the phone UI. */
+  .system-activity,
+  [class^="system-activity"],
+  [class*=" system-activity"],
+  .system-notification,
+  [class^="system-notification"],
+  [class*=" system-notification"],
+  .notification-stack,
+  .os-toast-stack {
+    display: none !important;
+  }
+
+  /* The custom pointer is useful on desktop but unnecessary on touch. */
+  .cursor,
+  .custom-cursor,
+  [class^="cursor__"],
+  [class*=" cursor__"] {
+    display: none !important;
+  }
+
+  button,
+  a,
+  [role="button"] {
+    cursor: pointer !important;
+  }
+
+  /* =======================================================
+     BOOT SCREEN
+  ======================================================= */
+
+  .boot-screen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw;
+    height: var(--mobile-vh);
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .boot-screen__shell {
+    width: 100% !important;
+    height: var(--mobile-vh) !important;
+    min-height: 0 !important;
+    grid-template-rows: 46px minmax(0, 1fr) 34px !important;
+    overflow: hidden;
+    border: 0 !important;
+  }
+
+  .boot-screen__topbar,
+  .boot-screen__footer {
+    min-width: 0;
+    padding-right: max(12px, env(safe-area-inset-right)) !important;
+    padding-left: max(12px, env(safe-area-inset-left)) !important;
+  }
+
+  .boot-screen__topbar strong {
+    font-size: 12px;
+  }
+
+  .boot-screen__top-meta {
+    gap: 0 !important;
+  }
+
+  .boot-screen__top-meta span:not(:last-child),
+  .boot-screen__footer span,
+  .boot-screen__footer strong {
+    display: none !important;
+  }
+
+  .boot-screen__layout {
+    min-height: 0;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+
+  .boot-screen__identity {
+    min-height: 0;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(118px, 40vw);
+    grid-template-rows: 1fr !important;
+    align-items: center;
+    gap: 8px !important;
+    padding: 14px 14px 12px !important;
+    overflow: hidden;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(255, 174, 36, 0.22);
+  }
+
+  .boot-screen__title {
+    min-width: 0;
+  }
+
+  .boot-screen__title p {
+    margin-bottom: 7px;
+    font-size: 6px;
+    letter-spacing: 0.09em;
+    white-space: nowrap;
+  }
+
+  .boot-screen__title h1 {
+    max-width: 100%;
+    font-size: clamp(48px, 17vw, 68px) !important;
+    line-height: 0.78;
+    white-space: nowrap;
+  }
+
+  .boot-screen__title h2 {
+    max-width: 100%;
+    margin-top: 12px !important;
+    font-size: clamp(28px, 9.4vw, 38px) !important;
+    line-height: 0.82;
+    white-space: nowrap;
+  }
+
+  .boot-screen__mark-panel {
+    width: 100%;
+    min-height: 128px !important;
+    aspect-ratio: 1;
+  }
+
+  .boot-screen__mark-stage {
+    width: min(34vw, 132px) !important;
+  }
+
+  .boot-screen__mark-data,
+  .boot-screen__mark-target {
+    display: none !important;
+  }
+
+  .boot-screen__system {
+    min-height: 0;
+    gap: 8px !important;
+    padding: 10px 14px 8px !important;
+    overflow: hidden;
+  }
+
+  .boot-screen__cards {
+    flex: 0 0 auto;
+  }
+
+  .boot-screen__card {
+    min-height: 42px !important;
+    gap: 4px !important;
+    padding: 0 8px !important;
+  }
+
+  .boot-screen__card span {
+    font-size: 5px;
+  }
+
+  .boot-screen__card strong {
+    font-size: 9px;
+  }
+
+  .boot-screen__pulse {
+    display: none !important;
+  }
+
+  .boot-screen__progress-block {
+    flex: 0 0 auto;
+  }
+
+  .boot-screen__progress-label {
+    margin-bottom: 5px;
+    font-size: 6px;
+  }
+
+  .boot-screen__progress-track {
+    height: 10px;
+  }
+
+  .boot-screen__log {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .boot-screen__log-row {
+    min-height: 25px !important;
+    grid-template-columns: 26px minmax(0, 1fr) auto !important;
+    gap: 7px !important;
+    font-size: 6px !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .boot-screen__log-row p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .boot-screen__enter-zone {
+    flex: 0 0 auto;
+    gap: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  .boot-screen__enter {
+    min-height: 45px !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    padding: 0 13px !important;
+  }
+
+  .boot-screen__enter > span,
+  .boot-screen__enter-zone > small {
+    display: none !important;
+  }
+
+  .boot-screen__enter strong {
+    font-size: 9px;
+  }
+
+  .boot-screen__ready-prompt {
+    right: 10px !important;
+    bottom: calc(44px + env(safe-area-inset-bottom)) !important;
+    left: 10px !important;
+    min-width: 0 !important;
+    grid-template-columns: 1fr !important;
+    gap: 4px !important;
+    padding: 13px 14px !important;
+    text-align: center;
+  }
+
+  .boot-screen__ready-prompt strong {
+    font-size: clamp(21px, 7vw, 28px) !important;
+  }
+
+  .boot-screen__ready-prompt span,
+  .boot-screen__ready-prompt small {
+    font-size: 6px !important;
+    white-space: normal !important;
+  }
+
+  /* =======================================================
+     APP WINDOWS — native full-screen view on phones
+  ======================================================= */
+
+  .window-layer {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw;
+    height: var(--mobile-vh);
+    padding: 0 !important;
+  }
+
+  .window {
+    width: 100vw !important;
+    height: var(--mobile-vh) !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    grid-template-rows: 48px 29px minmax(0, 1fr) 27px !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    transform: none;
+  }
+
+  .window__header {
+    min-width: 0;
+    grid-template-columns: auto minmax(0, 1fr) 48px !important;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .window__header-status {
+    display: none !important;
+  }
+
+  .window__identity {
+    min-width: 0;
+  }
+
+  .window__identity span {
+    display: none !important;
+  }
+
+  .window__identity strong {
+    font-size: 8px;
+  }
+
+  .window__close {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .window__toolbar {
+    gap: 13px !important;
+    padding: 0 10px !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .window__toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .window__toolbar strong {
+    display: none !important;
+  }
+
+  .window__body {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto !important;
+    overscroll-behavior: contain;
+  }
+
+  .window__footer {
+    grid-template-columns: 1fr auto !important;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .window__footer span:last-child {
+    display: none !important;
+  }
+
+  /* =======================================================
+     APPLICATION LOADER
+  ======================================================= */
+
+  .loader {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    justify-content: center !important;
+    padding: 18px !important;
+    overflow: hidden !important;
+  }
+
+  .loader__header {
+    margin-bottom: 22px !important;
+    font-size: 7px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .loader__title {
+    margin-bottom: 9px !important;
+    font-size: clamp(20px, 7vw, 28px) !important;
+    line-height: 1 !important;
+  }
+
+  .loader__stage {
+    min-height: 18px;
+    margin-bottom: 15px !important;
+    overflow: hidden;
+    font-size: 8px !important;
+    letter-spacing: 0.12em !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .loader__bar {
+    height: 7px !important;
+  }
+
+  .loader__footer {
+    margin-top: 10px !important;
+    font-size: 7px !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .loader__log {
+    margin-top: 22px !important;
+    gap: 6px !important;
+  }
+
+  .loader__line {
+    gap: 9px !important;
+  }
+
+  .loader__line span,
+  .loader__line p {
+    font-size: 7px !important;
+    letter-spacing: 0.07em !important;
+  }
+
+  .loader__line span {
+    width: 22px !important;
+  }
+
+  .loader__line p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* A full-screen app does not need the desktop taskbar beneath it. */
+  .site-scroll:has(.window-layer .window) .taskbar {
+    visibility: hidden;
+  }
+}
+
+/* Very short phones and landscape mode need an even tighter boot view. */
+@media (max-width: 900px) and (max-height: 650px) {
+  .boot-screen__layout {
+    grid-template-columns: minmax(170px, 0.8fr) minmax(0, 1.2fr) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+  }
+
+  .boot-screen__identity {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto !important;
+    border-right: 1px solid rgba(255, 174, 36, 0.22) !important;
+    border-bottom: 0 !important;
+  }
+
+  .boot-screen__mark-panel,
+  .boot-screen__cards,
+  .boot-screen__pulse,
+  .boot-screen__log-row:nth-child(-n + 3) {
+    display: none !important;
+  }
+
+  .boot-screen__system {
+    justify-content: center;
+  }
+
+  .boot-screen__ready-prompt {
+    right: 18px !important;
+    bottom: 42px !important;
+    left: auto !important;
+    width: min(430px, 56vw);
+  }
+
+  .loader__header {
+    margin-bottom: 12px !important;
+  }
+
+  .loader__log {
+    margin-top: 12px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boot-screen,
+  .window,
+  .loader {
+    scroll-behavior: auto;
+  }
+}

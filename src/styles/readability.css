@@ -1,0 +1,272 @@
+/* =========================================================
+   MAGI OS — DOSSIER READABILITY PASS
+========================================================= */
+
+/* Top dossier header */
+
+.dossier__identity span {
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.dossier__identity strong {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.dossier__top-data > span {
+  font-size: 8px;
+  line-height: 1.35;
+}
+
+.dossier__top-data strong {
+  font-size: 11px;
+}
+
+/* Sidebar headings */
+
+.dossier__subject-card > header,
+.dossier__telemetry > header {
+  min-height: 38px;
+  font-size: 9px;
+}
+
+.dossier__subject-card > header strong,
+.dossier__telemetry > header strong {
+  font-size: 9px;
+}
+
+.dossier__identity-table dt,
+.dossier__identity-table dd {
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.dossier__identity-table > div {
+  min-height: 42px;
+}
+
+.dossier__sidebar-block > p {
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.dossier__tags span {
+  padding: 7px 9px;
+  font-size: 8px;
+}
+
+.dossier__telemetry footer {
+  min-height: 32px;
+  font-size: 8px;
+}
+
+/* Main project heading */
+
+.dossier__heading p {
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.dossier__classification span {
+  font-size: 9px;
+}
+
+.dossier__classification strong {
+  font-size: 11px;
+}
+
+/* Main navigation tabs */
+
+.dossier__tab {
+  min-height: 58px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.dossier__tab span {
+  font-size: 9px;
+}
+
+/* Shared tab-panel headings */
+
+.dossier-panel__header p {
+  font-size: 10px;
+}
+
+.dossier-panel__header > span {
+  font-size: 9px;
+}
+
+.dossier-panel__header h2 {
+  line-height: 0.95;
+}
+
+/* Mission brief */
+
+.dossier-brief__main > p {
+  margin-bottom: 18px;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.dossier-brief__main h2 {
+  line-height: 1.04;
+}
+
+.dossier-brief__description {
+  color: rgba(255, 240, 179, 0.9);
+
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.dossier-brief__analysis header,
+.dossier-brief__notes header,
+.dossier-specs__layout section > header {
+  min-height: 46px;
+  font-size: 10px;
+}
+
+.dossier-brief__analysis header strong,
+.dossier-brief__notes header strong,
+.dossier-specs__layout section > header strong {
+  font-size: 9px;
+}
+
+.dossier-brief__analysis dl div {
+  min-height: 48px;
+}
+
+.dossier-brief__analysis dt,
+.dossier-brief__analysis dd {
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.dossier-brief__notes p {
+  color: rgba(255, 240, 179, 0.84);
+
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* Process section */
+
+.dossier-process__copy span {
+  font-size: 8px;
+}
+
+.dossier-process__copy h3 {
+  font-size: 18px;
+}
+
+.dossier-process__copy p {
+  color: rgba(255, 210, 115, 0.78);
+
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.dossier-process__timeline article > strong {
+  font-size: 9px;
+}
+
+/* Media section */
+
+.dossier-media__grid button > span,
+.dossier-media__grid button > strong {
+  font-size: 8px;
+}
+
+.dossier-media__empty {
+  font-size: 10px;
+}
+
+/* System data */
+
+.dossier-specs dt,
+.dossier-specs dd {
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.dossier-specs dl div {
+  min-height: 48px;
+}
+
+.dossier-specs__tools span {
+  font-size: 9px;
+}
+
+.dossier-specs__tools strong {
+  font-size: 10px;
+}
+
+/* Footer */
+
+.dossier__footer {
+  font-size: 8px;
+}
+
+/* Archive window */
+
+.archive__header p,
+.archive__header > span {
+  font-size: 9px;
+}
+
+.project-card__details h3 {
+  font-size: 13px;
+}
+
+.project-card__details p,
+.project-card__details span {
+  font-size: 8px;
+}
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .dossier__tab {
+    font-size: 9px;
+  }
+
+  .dossier-brief__description {
+    font-size: 14px;
+  }
+
+  .dossier-brief__notes p {
+    font-size: 12px;
+  }
+}
+
+/* Phones */
+
+@media (max-width: 600px) {
+  .dossier__identity strong {
+    font-size: 11px;
+  }
+
+  .dossier__tab {
+    font-size: 8px;
+  }
+
+  .dossier-brief__description {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .dossier-brief__notes p {
+    font-size: 11px;
+  }
+
+  .dossier-process__copy p {
+    font-size: 11px;
+  }
+
+  .dossier-specs dt,
+  .dossier-specs dd {
+    font-size: 9px;
+  }
+}

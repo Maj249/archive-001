@@ -1,0 +1,27 @@
+/* MAGI OS — 3D subject preview integration */
+
+.dossier__subject-preview--model {
+  padding: 0;
+  overflow: hidden;
+  background: #050308;
+}
+
+.dossier__subject-preview--model > .model-viewer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.dossier__subject-preview--model .dossier__scan-corner {
+  z-index: 12;
+  pointer-events: none;
+}
+
+@media (max-width: 700px) {
+  .dossier__subject-preview--model {
+    min-height: 280px;
+  }
+}
