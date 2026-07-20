@@ -4,6 +4,8 @@ import "./Music.css";
 
 export default function Music() {
   const hasSpotifyLink = Boolean(music.spotifyUrl?.trim());
+  const hasDiscogsLink = Boolean(music.discogsUrl?.trim());
+  const hasMusicLinks = hasSpotifyLink || hasDiscogsLink;
 
   return (
     <section className="music-app">
@@ -15,7 +17,7 @@ export default function Music() {
 
         <div className="music-app__status">
           <i />
-          {hasSpotifyLink ? "SPOTIFY LINKED" : "LINK PENDING"}
+          {hasMusicLinks ? "AUDIO ARCHIVE LINKED" : "LINK PENDING"}
         </div>
       </header>
 
@@ -53,39 +55,59 @@ export default function Music() {
 
             <div>
               <dt>SERVICE</dt>
-              <dd>SPOTIFY</dd>
+              <dd>SPOTIFY + DISCOGS</dd>
             </div>
 
             <div>
               <dt>CONNECTION</dt>
-              <dd>{hasSpotifyLink ? "ACTIVE" : "WAITING FOR URL"}</dd>
+              <dd>{hasMusicLinks ? "ACTIVE" : "WAITING FOR URL"}</dd>
             </div>
           </dl>
 
-          {hasSpotifyLink ? (
-            <a
-              className="music-app__launch"
-              href={music.spotifyUrl}
-              target="_blank"
-              rel="noreferrer"
-              data-cursor="OPEN SPOTIFY"
-            >
-              OPEN MY SPOTIFY
-              <span>↗</span>
-            </a>
-          ) : (
-            <div className="music-app__launch music-app__launch--disabled">
-              ADD SPOTIFY URL IN MUSIC.JS
-              <span>...</span>
-            </div>
-          )}
+          <div className="music-app__links">
+            {hasSpotifyLink ? (
+              <a
+                className="music-app__launch"
+                href={music.spotifyUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="OPEN SPOTIFY"
+              >
+                OPEN MY SPOTIFY
+                <span>↗</span>
+              </a>
+            ) : (
+              <div className="music-app__launch music-app__launch--disabled">
+                SPOTIFY LINK PENDING
+                <span>...</span>
+              </div>
+            )}
+
+            {hasDiscogsLink ? (
+              <a
+                className="music-app__launch music-app__launch--discogs"
+                href={music.discogsUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-cursor="OPEN DISCOGS"
+              >
+                BROWSE MY RECORD COLLECTION
+                <span>↗</span>
+              </a>
+            ) : (
+              <div className="music-app__launch music-app__launch--disabled">
+                DISCOGS LINK PENDING
+                <span>...</span>
+              </div>
+            )}
+          </div>
         </section>
       </div>
 
       <footer className="music-app__footer">
         <span>MAGI AUDIO NODE / 001</span>
         <strong>PERSONAL FREQUENCY ONLINE</strong>
-        <span>SPOTIFY EXTERNAL LINK</span>
+        <span>SPOTIFY + DISCOGS LINKS</span>
       </footer>
     </section>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { finishLoading } from "../../system/windowManager";
 
 import "./styles.css";
@@ -12,38 +12,48 @@ const STAGES = [
   "RENDERING INTERFACE..."
 ];
 
-export default function Loader() {
+export default function Loader({ instanceId }) {
   const [progress, setProgress] = useState(0);
-  const [stage, setStage] = useState(0);
+  const stage = useMemo(
+    () =>
+      Math.min(
+        STAGES.length - 1,
+        Math.floor((progress / 100) * STAGES.length)
+      ),
+    [progress]
+  );
 
   useEffect(() => {
-    let value = 0;
+    let frameId = 0;
+    let finishTimer = 0;
+    let startedAt = null;
+    const duration = 1550;
 
-    const timer = setInterval(() => {
-      value += Math.random() * 7 + 2;
+    function animateProgress(timestamp) {
+      if (startedAt === null) startedAt = timestamp;
 
-      if (value > 100) value = 100;
+      const elapsed = timestamp - startedAt;
+      const linearProgress = Math.min(1, elapsed / duration);
+      const easedProgress = 1 - Math.pow(1 - linearProgress, 2.4);
 
-      setProgress(value);
+      setProgress(Math.min(100, easedProgress * 100));
 
-      const currentStage = Math.min(
-        Math.floor((value / 100) * STAGES.length),
-        STAGES.length - 1
-      );
-
-      setStage(currentStage);
-
-      if (value >= 100) {
-        clearInterval(timer);
-
-        setTimeout(() => {
-          finishLoading();
-        }, 350);
+      if (linearProgress < 1) {
+        frameId = window.requestAnimationFrame(animateProgress);
+        return;
       }
-    }, 70);
 
-    return () => clearInterval(timer);
-  }, []);
+      setProgress(100);
+      finishTimer = window.setTimeout(() => finishLoading(instanceId), 260);
+    }
+
+    frameId = window.requestAnimationFrame(animateProgress);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(finishTimer);
+    };
+  }, [instanceId]);
 
   return (
     <div className="loader">

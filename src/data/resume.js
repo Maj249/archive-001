@@ -5,7 +5,7 @@ const resume = {
   headline: "INDUSTRIAL DESIGNER / MAKER / VISUAL THINKER",
 
   summary:
-    "Replace this paragraph with a short introduction to your practice, the kind of work you make, and what you care about as a designer.",
+    "I'm an Industrial Design student at RMIT with over five years of experience across Melbourne's busiest hospitality venues. I thrive in fast-paced environments and take pride in delivering great service, leading by example, and creating a positive experience for both customers and teammates.",
 
   experience: [
     {

@@ -65,8 +65,14 @@ export default function AnimatedBackground() {
       return undefined;
     }
 
-    const context = canvas.getContext("2d");
-    const bloom = buildBloom();
+    const context = canvas.getContext("2d", { alpha: true });
+    const mobileMode = window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    ).matches;
+    const bloom = buildBloom(
+      mobileMode ? 8 : 14,
+      mobileMode ? 18 : 30
+    );
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -78,12 +84,17 @@ export default function AnimatedBackground() {
     let startTime = performance.now();
     let pointerX = 0;
     let pointerY = 0;
+    let lastFrame = 0;
+    let pageVisible = !document.hidden;
 
     function resize() {
       const bounds = canvas.getBoundingClientRect();
       width = bounds.width;
       height = bounds.height;
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      pixelRatio = Math.min(
+        window.devicePixelRatio || 1,
+        mobileMode ? 1 : 1.5
+      );
 
       canvas.width = Math.max(1, Math.floor(width * pixelRatio));
       canvas.height = Math.max(1, Math.floor(height * pixelRatio));
@@ -236,6 +247,23 @@ export default function AnimatedBackground() {
     }
 
     function render(now) {
+      if (!pageVisible) {
+        if (!reducedMotion) {
+          animationFrame = window.requestAnimationFrame(render);
+        }
+        return;
+      }
+
+      if (
+        mobileMode &&
+        !reducedMotion &&
+        now - lastFrame < 1000 / 30
+      ) {
+        animationFrame = window.requestAnimationFrame(render);
+        return;
+      }
+
+      lastFrame = now;
       const time = reducedMotion ? 0 : now - startTime;
 
       context.clearRect(0, 0, width, height);
@@ -248,14 +276,32 @@ export default function AnimatedBackground() {
       }
     }
 
+    function handleVisibilityChange() {
+      pageVisible = !document.hidden;
+    }
+
     resize();
     window.addEventListener("resize", resize);
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    document.addEventListener(
+      "visibilitychange",
+      handleVisibilityChange
+    );
+
+    if (!mobileMode) {
+      window.addEventListener("pointermove", handlePointerMove, {
+        passive: true,
+      });
+    }
+
     animationFrame = window.requestAnimationFrame(render);
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
       window.removeEventListener("resize", resize);
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
       window.removeEventListener("pointermove", handlePointerMove);
     };
   }, []);
@@ -311,4 +357,5 @@ function TelemetryRail({ className, title, lines }) {
     </div>
   );
 }
+
 

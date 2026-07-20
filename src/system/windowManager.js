@@ -18,8 +18,10 @@ export function openApp(id) {
   notify();
 }
 
-export function finishLoading() {
+export function finishLoading(instanceId) {
   if (!activeApp) return;
+
+  if (instanceId && activeApp.openedAt !== instanceId) return;
 
   activeApp = {
     ...activeApp,

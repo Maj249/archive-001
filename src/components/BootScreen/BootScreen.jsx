@@ -52,22 +52,35 @@ export default function BootScreen({ onComplete }) {
   }, []);
 
   useEffect(() => {
-    let current = 0;
+    let frameId = 0;
+    let readyTimer = 0;
+    let startedAt = null;
+    const duration = 2400;
 
-    const timer = window.setInterval(() => {
-      const remaining = 100 - current;
-      const increment = Math.max(1, Math.min(remaining, Math.random() * 7 + 2));
+    function animateProgress(timestamp) {
+      if (startedAt === null) startedAt = timestamp;
 
-      current = Math.min(100, current + increment);
-      setProgress(current);
+      const elapsed = timestamp - startedAt;
+      const linearProgress = Math.min(1, elapsed / duration);
+      const easedProgress = 1 - Math.pow(1 - linearProgress, 2.25);
 
-      if (current >= 100) {
-        window.clearInterval(timer);
-        window.setTimeout(() => setReady(true), 420);
+      setProgress(Math.min(100, easedProgress * 100));
+
+      if (linearProgress < 1) {
+        frameId = window.requestAnimationFrame(animateProgress);
+        return;
       }
-    }, 105);
 
-    return () => window.clearInterval(timer);
+      setProgress(100);
+      readyTimer = window.setTimeout(() => setReady(true), 320);
+    }
+
+    frameId = window.requestAnimationFrame(animateProgress);
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.clearTimeout(readyTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -80,7 +93,7 @@ export default function BootScreen({ onComplete }) {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => window.removeEventListener("keydown", handleKeyDown);
-  });
+  }, [ready, entering, onComplete]);
 
   function handleEnter() {
     if (!ready || entering) {

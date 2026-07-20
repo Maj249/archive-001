@@ -45,18 +45,24 @@ function disposeMaterial(material) {
   material?.dispose();
 }
 
-function createMaterials(accent) {
-  const solidMaterial = new THREE.MeshPhysicalMaterial({
+function createMaterials(accent, lightweight = false) {
+  const sharedOptions = {
     color: accent,
     emissive: new THREE.Color(accent).multiplyScalar(0.12),
     metalness: 0.42,
     roughness: 0.26,
-    clearcoat: 0.65,
-    clearcoatRoughness: 0.22,
     transparent: true,
     opacity: 0.9,
     side: THREE.DoubleSide,
-  });
+  };
+
+  const solidMaterial = lightweight
+    ? new THREE.MeshStandardMaterial(sharedOptions)
+    : new THREE.MeshPhysicalMaterial({
+        ...sharedOptions,
+        clearcoat: 0.65,
+        clearcoatRoughness: 0.22,
+      });
 
   const wireMaterial = new THREE.MeshBasicMaterial({
     color: 0xd9d0ff,
@@ -70,7 +76,9 @@ function createMaterials(accent) {
 }
 
 function buildStlObject(geometry, materials, showWireframe) {
-  geometry.computeVertexNormals();
+  if (!geometry.attributes.normal) {
+    geometry.computeVertexNormals();
+  }
 
   const root = new THREE.Group();
   const solidMesh = new THREE.Mesh(
@@ -99,7 +107,9 @@ function buildObjObject(object, materials, showWireframe) {
   object.traverse((child) => {
     if (!child.isMesh) return;
 
-    child.geometry.computeVertexNormals();
+    if (!child.geometry.attributes.normal) {
+      child.geometry.computeVertexNormals();
+    }
 
     if (Array.isArray(child.material)) {
       child.material.forEach((material) =>
@@ -191,9 +201,12 @@ export default function ModelViewer({
     let lastRenderTime = 0;
     let isOnScreen = true;
 
+    const mobileMode = window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    ).matches;
     const isSwaga = /swaga/i.test(modelUrl);
-    const showWireframe = !isSwaga;
-    const targetFrameTime = isSwaga ? 1000 / 30 : 0;
+    const showWireframe = !isSwaga && !mobileMode;
+    const targetFrameTime = mobileMode ? 1000 / 30 : 0;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(34, 1, 0.01, 100);
@@ -201,12 +214,15 @@ export default function ModelViewer({
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: !isSwaga,
+      antialias: !isSwaga && !mobileMode,
       powerPreference: "high-performance",
     });
 
     renderer.setPixelRatio(
-      Math.min(window.devicePixelRatio || 1, isSwaga ? 1.1 : 1.75)
+      Math.min(
+        window.devicePixelRatio || 1,
+        mobileMode ? 1 : isSwaga ? 1.25 : 1.5
+      )
     );
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -246,7 +262,11 @@ export default function ModelViewer({
     scene.add(lowerLight);
 
     const floorRing = new THREE.Mesh(
-      new THREE.RingGeometry(0.83, 0.85, isSwaga ? 48 : 96),
+      new THREE.RingGeometry(
+        0.83,
+        0.85,
+        mobileMode ? 36 : isSwaga ? 48 : 96
+      ),
       new THREE.MeshBasicMaterial({
         color: accent,
         transparent: true,
@@ -258,7 +278,7 @@ export default function ModelViewer({
     floorRing.position.y = -0.92;
     scene.add(floorRing);
 
-    const materials = createMaterials(accent);
+    const materials = createMaterials(accent, mobileMode);
     const loader =
       modelFormat === "OBJ" ? new OBJLoader() : new STLLoader();
 
@@ -413,3 +433,4 @@ export default function ModelViewer({
     </div>
   );
 }
+

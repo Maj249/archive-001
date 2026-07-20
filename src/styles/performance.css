@@ -1,0 +1,50 @@
+/* MAGI OS — MOBILE MEMORY AND RENDERING STABILITY */
+
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  /* These effects are nearly invisible on a phone but expensive to composite. */
+  .animated-background__noise,
+  .animated-background__scanline,
+  .dossier__noise,
+  .dossier__scanlines,
+  .media-lightbox__scanlines,
+  .photography-lightbox__scanlines {
+    display: none !important;
+  }
+
+  .animated-background__floor,
+  .animated-background__target {
+    animation: none !important;
+  }
+
+  .animated-background__canvas {
+    filter: none !important;
+  }
+
+  /* Avoid full-resolution blur passes while large images transition. */
+  .dossier img,
+  .media-lightbox img,
+  .photography-lightbox img {
+    filter: none !important;
+  }
+
+  .dossier,
+  .window,
+  .media-lightbox,
+  .photography-lightbox {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .dossier-panel,
+  .dossier-media__grid > *,
+  .photography-card {
+    contain: layout paint style;
+  }
+
+  .dossier__workspace,
+  .window__body,
+  .photography-app {
+    overscroll-behavior: contain;
+  }
+}
+

@@ -46,7 +46,17 @@ export default function Sketchbooks() {
   }, [activeIndex]);
 
   useEffect(() => {
-    if (activeIndex === null || sketches.length < 2) return;
+    const lowMemoryMode = window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    ).matches;
+
+    if (
+      activeIndex === null ||
+      sketches.length < 2 ||
+      lowMemoryMode
+    ) {
+      return undefined;
+    }
 
     const nextIndex =
       activeIndex === sketches.length - 1 ? 0 : activeIndex + 1;
@@ -218,6 +228,7 @@ function SketchbookLightbox({
               key={page.src}
               src={page.src}
               alt={page.alt}
+              decoding="async"
               initial={{
                 opacity: 0,
                 scale: 0.98,
@@ -257,3 +268,4 @@ function SketchbookLightbox({
     </motion.section>
   );
 }
+

@@ -37,15 +37,6 @@ const germaprobe = {
     "projects/germaprobe/process-04.jpg",
   ],
 
-  videos: [
-    {
-      src: "projects/germaprobe/video-01.mp4",
-      title: "GERMAPROBE FIELD TEST",
-      poster: "projects/germaprobe/cover.jpg",
-      type: "video/mp4",
-    },
-  ],
-
   model: "models/ship3june.stl",
   modelFit: 1.5,
   modelRotation: [0, 0, Math.PI],
@@ -102,3 +93,4 @@ const germaprobe = {
 };
 
 export default germaprobe;
+

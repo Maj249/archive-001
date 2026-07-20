@@ -379,6 +379,8 @@ export default function ProjectViewer({
                   key={gallery[activeImage]}
                   src={gallery[activeImage]}
                   alt={`${project.title} view ${activeImage + 1}`}
+                  decoding="async"
+                  fetchPriority="high"
                   initial={{
                     opacity: 0,
                     scale: 1.03,
@@ -748,6 +750,8 @@ function MediaPanel({
               <img
                 src={image}
                 alt={`${project.title} archive ${index + 1}`}
+                loading="lazy"
+                decoding="async"
               />
 
               <span>
@@ -879,6 +883,7 @@ function MediaLightbox({
               key={image}
               src={image}
               alt={`${project.title} archive view ${activeIndex + 1}`}
+              decoding="async"
               initial={{
                 opacity: 0,
                 scale: 0.975,
@@ -1051,3 +1056,4 @@ function normalizeVideos(videos) {
     })
     .filter((video) => Boolean(video.src));
 }
+

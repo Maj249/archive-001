@@ -124,7 +124,7 @@
 .loader__bar{
 
     width:100%;
-    height:8px;
+    height:12px;
 
     background:#171717;
 
@@ -148,7 +148,7 @@
     box-shadow:
         0 0 18px rgba(255,181,45,.55);
 
-    transition:width .18s ease;
+    will-change:width;
 
 }
 

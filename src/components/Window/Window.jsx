@@ -148,7 +148,7 @@ export default function Window() {
 
             <div className="window__body">
               {activeApp.loading ? (
-                <Loader />
+                <Loader instanceId={activeApp.openedAt} />
               ) : (
                 <AppComponent
                   {...app.props}

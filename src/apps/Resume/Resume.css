@@ -430,3 +430,313 @@
   }
 }
 
+/* =========================================================
+   SPLIT RESUME VIEW — PROFILE LEFT / PDF PREVIEW RIGHT
+========================================================= */
+
+.resume-app--preview-layout {
+  padding: 14px;
+}
+
+.resume-app--preview-layout .resume-app__actions a:nth-of-type(1) {
+  min-width: 132px;
+}
+
+.resume-app__workspace {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.72fr) minmax(460px, 1.7fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.resume-app__workspace > .resume-app__sidebar,
+.resume-app__preview-panel {
+  border: 1px solid rgba(255, 174, 36, 0.2);
+  background:
+    linear-gradient(rgba(255, 174, 36, 0.014), transparent 30%),
+    #080604;
+}
+
+.resume-app__hero--sidebar {
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 15px;
+  min-height: 0;
+  padding: 18px;
+}
+
+.resume-app__hero--sidebar .resume-app__monogram {
+  width: 74px;
+  height: 74px;
+  font-size: 35px;
+}
+
+.resume-app__hero--sidebar .resume-app__title h1 {
+  font-size: clamp(25px, 3vw, 38px);
+}
+
+.resume-app__hero--sidebar .resume-app__title strong {
+  font-size: 7px;
+  line-height: 1.45;
+}
+
+.resume-app__hero--sidebar .resume-app__contact {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 14px 0 0;
+  border-top: 1px solid rgba(255, 174, 36, 0.14);
+  border-left: 0;
+}
+
+.resume-app__workspace .resume-app__sidebar > section {
+  padding: 18px;
+}
+
+.resume-app__workspace .resume-app__profile > p {
+  color: rgba(255, 240, 179, 0.78);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.resume-app__preview-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.resume-app__preview-header,
+.resume-app__preview-footer {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255, 174, 36, 0.16);
+}
+
+.resume-app__preview-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.resume-app__preview-header span,
+.resume-app__preview-footer span {
+  color: rgba(255, 174, 36, 0.48);
+  font-size: 7px;
+  letter-spacing: 0.11em;
+}
+
+.resume-app__preview-header strong {
+  color: var(--text-bright);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+
+.resume-app__preview-header > div:last-child strong,
+.resume-app__preview-footer strong {
+  color: var(--green);
+}
+
+.resume-app__preview {
+  position: relative;
+  height: clamp(580px, calc(100dvh - 225px), 900px);
+  min-height: 580px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(65, 191, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 191, 255, 0.025) 1px, transparent 1px),
+    #030303;
+  background-size: 28px 28px;
+}
+
+.resume-app__preview iframe {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+  background: #ececec;
+}
+
+.resume-app__preview-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 30px;
+  color: rgba(255, 174, 36, 0.55);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.resume-app__preview-fallback a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.resume-app__preview-footer {
+  border-top: 1px solid rgba(255, 174, 36, 0.16);
+  border-bottom: 0;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+}
+
+.resume-app__preview-footer strong {
+  font-size: 7px;
+  font-weight: 400;
+}
+
+@media (max-width: 900px) {
+  .resume-app__workspace {
+    grid-template-columns: minmax(230px, 0.68fr) minmax(410px, 1.4fr);
+  }
+
+  .resume-app--preview-layout .resume-app__actions button,
+  .resume-app--preview-layout .resume-app__actions a {
+    min-width: 78px;
+    padding: 0 9px;
+    font-size: 6px;
+  }
+}
+
+@media (max-width: 700px) {
+  .resume-app--preview-layout {
+    padding: 8px;
+  }
+
+  .resume-app--preview-layout .resume-app__system-header {
+    display: block;
+  }
+
+  .resume-app--preview-layout .resume-app__system-header > div:first-child {
+    min-height: 42px;
+  }
+
+  .resume-app--preview-layout .resume-app__actions {
+    min-height: 44px;
+    border-top: 1px solid rgba(255, 174, 36, 0.16);
+  }
+
+  .resume-app--preview-layout .resume-app__actions button,
+  .resume-app--preview-layout .resume-app__actions a,
+  .resume-app--preview-layout .resume-app__actions a:nth-of-type(1) {
+    min-width: 0;
+    flex: 1;
+    border-left: 0;
+    border-right: 1px solid rgba(255, 174, 36, 0.16);
+  }
+
+  .resume-app--preview-layout .resume-app__actions a:last-child {
+    border-right: 0;
+  }
+
+  .resume-app__workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-app__hero--sidebar {
+    grid-template-columns: 62px minmax(0, 1fr);
+  }
+
+  .resume-app__hero--sidebar .resume-app__monogram {
+    width: 62px;
+    height: 62px;
+    font-size: 30px;
+  }
+
+  .resume-app__hero--sidebar .resume-app__contact {
+    display: flex;
+  }
+
+  .resume-app__preview-header > div:last-child,
+  .resume-app__preview-footer span:last-child {
+    display: none;
+  }
+
+  .resume-app__preview {
+    height: 72dvh;
+    min-height: 520px;
+  }
+}
+
+/* =========================================================
+   LIGHTWEIGHT JPG RESUME PREVIEW + LABELED CONTACT DATA
+========================================================= */
+
+.resume-app__contact-item {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-right: 8px;
+}
+
+.resume-app__contact-item small {
+  color: rgba(255, 174, 36, 0.44);
+  font-size: 6px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+}
+
+.resume-app__contact-item span,
+.resume-app__contact-item a {
+  color: rgba(255, 240, 179, 0.76);
+  font-size: 8px;
+  line-height: 1.45;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.resume-app__contact-item a {
+  color: var(--green);
+}
+
+.resume-app__preview {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  padding: clamp(10px, 1.8vw, 22px);
+  background:
+    linear-gradient(rgba(65, 191, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 191, 255, 0.025) 1px, transparent 1px),
+    #030303;
+  background-size: 28px 28px;
+}
+
+.resume-app__preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  object-position: top center;
+  margin: 0 auto;
+  background: #eee2ce;
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(255, 240, 179, 0.18);
+}
+
+@media (max-width: 700px) {
+  .resume-app__hero--sidebar .resume-app__contact {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .resume-app__contact-item {
+    padding: 8px 0;
+    border-top: 1px solid rgba(255, 174, 36, 0.1);
+  }
+
+  .resume-app__preview {
+    height: auto;
+    min-height: 0;
+    padding: 8px;
+  }
+}

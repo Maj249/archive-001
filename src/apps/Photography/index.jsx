@@ -47,7 +47,17 @@ export default function Photography() {
   }, [activeIndex]);
 
   useEffect(() => {
-    if (activeIndex === null || photography.length < 2) return;
+    const lowMemoryMode = window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    ).matches;
+
+    if (
+      activeIndex === null ||
+      photography.length < 2 ||
+      lowMemoryMode
+    ) {
+      return undefined;
+    }
 
     const nextIndex =
       activeIndex === photography.length - 1 ? 0 : activeIndex + 1;
@@ -219,6 +229,7 @@ function PhotographyLightbox({
               key={photo.src}
               src={photo.src}
               alt={photo.alt}
+              decoding="async"
               initial={{
                 opacity: 0,
                 scale: 0.98,
@@ -258,3 +269,4 @@ function PhotographyLightbox({
     </motion.section>
   );
 }
+

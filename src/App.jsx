@@ -24,6 +24,7 @@ import {
 import "./styles/compatibility.css";
 import "./styles/readability.css";
 import "./styles/mobile.css";
+import "./styles/performance.css";
 
 const loadProjectViewer = () =>
   import("./components/ProjectViewer/ProjectViewer");
@@ -33,6 +34,11 @@ const ProjectViewer = lazy(loadProjectViewer);
 export default function App() {
   const [booting, setBooting] = useState(true);
   const [activeProject, setActiveProject] = useState(null);
+  const [mobileMode, setMobileMode] = useState(() =>
+    window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    ).matches
+  );
 
   const finishBoot = useCallback(() => {
     setBooting(false);
@@ -43,7 +49,19 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (booting) return undefined;
+    const query = window.matchMedia(
+      "(max-width: 700px), (hover: none) and (pointer: coarse)"
+    );
+    const updateMode = () => setMobileMode(query.matches);
+
+    updateMode();
+    query.addEventListener?.("change", updateMode);
+
+    return () => query.removeEventListener?.("change", updateMode);
+  }, []);
+
+  useEffect(() => {
+    if (booting || mobileMode) return undefined;
 
     const preload = () => {
       loadProjectViewer().catch(() => {});
@@ -59,7 +77,7 @@ export default function App() {
 
     const timer = window.setTimeout(preload, 1500);
     return () => window.clearTimeout(timer);
-  }, [booting]);
+  }, [booting, mobileMode]);
 
   function showPreviousProject() {
     if (!activeProject || projects.length === 0) {
@@ -102,11 +120,13 @@ export default function App() {
           <BootScreen key="boot" onComplete={finishBoot} />
         ) : (
           <main className="site-scroll" key="experience">
-            <Desktop />
-
-            <Window />
-
-            <BinaryMark />
+            {(!mobileMode || !activeProject) && (
+              <>
+                <Desktop />
+                <Window />
+                <BinaryMark />
+              </>
+            )}
 
             <Suspense fallback={null}>
               <AnimatePresence>
@@ -125,7 +145,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {!booting && <SystemActivity />}
+      {!booting && !mobileMode && !activeProject && (
+        <SystemActivity />
+      )}
     </>
   );
 }
+
