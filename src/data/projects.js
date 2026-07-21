@@ -2,7 +2,9 @@ import germaprobe from "./germaprobe";
 import gameController from "./gameController";
 import drinkingTray from "./drinkingTray";
 import swaga from "./swaga";
+import treasureChest from "./treasureChest";
 import davinciAerialScrew from "./davinciAerialScrew";
+import bottleOpener from "./bottleOpener";
 
 export const projects = [
   germaprobe,
@@ -29,25 +31,7 @@ export const projects = [
     specifications: [],
   },
 
-  {
-    id: 6,
-    slug: "treasure-chest",
-    title: "TREASURE CHEST",
-    category: "OBJECT DESIGN",
-    year: "TBC",
-    clearance: "04",
-    description:
-      "Project information is currently being prepared for the MAGI archive.",
-    notes:
-      "Full development notes, outcomes and reflections will be added with the project media.",
-    tools: [],
-    cover: null,
-    images: [],
-    videos: [],
-    process: [],
-    specifications: [],
-  },
-
+  treasureChest,
   davinciAerialScrew,
 
   {
@@ -68,4 +52,6 @@ export const projects = [
     process: [],
     specifications: [],
   },
+
+  bottleOpener,
 ];
