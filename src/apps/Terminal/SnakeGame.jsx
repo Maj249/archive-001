@@ -4,12 +4,20 @@ import "./SnakeGame.css";
 
 const COLUMNS = 24;
 const ROWS = 18;
+const BOARD_RATIO = COLUMNS / ROWS;
 const STARTING_SNAKE = [
   { x: 7, y: 9 },
   { x: 6, y: 9 },
   { x: 5, y: 9 },
 ];
 const STARTING_DIRECTION = { x: 1, y: 0 };
+
+const DIRECTIONS = {
+  up: { x: 0, y: -1 },
+  down: { x: 0, y: 1 },
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 },
+};
 
 function makeFood(snake) {
   const occupied = new Set(snake.map(({ x, y }) => `${x}:${y}`));
@@ -35,6 +43,7 @@ function getSavedHighScore() {
 }
 
 export default function SnakeGame({ onExit }) {
+  const arenaRef = useRef(null);
   const canvasRef = useRef(null);
   const frameRef = useRef(null);
   const previousTimeRef = useRef(0);
@@ -44,10 +53,18 @@ export default function SnakeGame({ onExit }) {
   const directionRef = useRef(STARTING_DIRECTION);
   const queuedDirectionRef = useRef(STARTING_DIRECTION);
   const touchStartRef = useRef(null);
+  const scoreRef = useRef(0);
+  const statusRef = useRef("playing");
 
+  const [boardSize, setBoardSize] = useState({ width: 640, height: 480 });
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(getSavedHighScore);
   const [status, setStatus] = useState("playing");
+
+  const updateStatus = useCallback((nextStatus) => {
+    statusRef.current = nextStatus;
+    setStatus(nextStatus);
+  }, []);
 
   const restart = useCallback(() => {
     snakeRef.current = STARTING_SNAKE.map((segment) => ({ ...segment }));
@@ -56,9 +73,10 @@ export default function SnakeGame({ onExit }) {
     queuedDirectionRef.current = STARTING_DIRECTION;
     previousTimeRef.current = 0;
     accumulatorRef.current = 0;
+    scoreRef.current = 0;
     setScore(0);
-    setStatus("playing");
-  }, []);
+    updateStatus("playing");
+  }, [updateStatus]);
 
   const chooseDirection = useCallback((nextDirection) => {
     const current = directionRef.current;
@@ -74,7 +92,7 @@ export default function SnakeGame({ onExit }) {
   }, []);
 
   const finishGame = useCallback((finalScore) => {
-    setStatus("game-over");
+    updateStatus("game-over");
 
     setHighScore((currentHighScore) => {
       const nextHighScore = Math.max(currentHighScore, finalScore);
@@ -85,15 +103,15 @@ export default function SnakeGame({ onExit }) {
           String(nextHighScore)
         );
       } catch {
-        // Storage is optional. The game still works if it is unavailable.
+        // The game still works if browser storage is unavailable.
       }
 
       return nextHighScore;
     });
-  }, []);
+  }, [updateStatus]);
 
   const moveSnake = useCallback(() => {
-    if (status !== "playing") return;
+    if (statusRef.current !== "playing") return;
 
     directionRef.current = queuedDirectionRef.current;
 
@@ -116,7 +134,7 @@ export default function SnakeGame({ onExit }) {
     );
 
     if (hitWall || hitSelf) {
-      finishGame(score);
+      finishGame(scoreRef.current);
       return;
     }
 
@@ -125,15 +143,15 @@ export default function SnakeGame({ onExit }) {
     const ateFood = food && nextHead.x === food.x && nextHead.y === food.y;
 
     if (ateFood) {
-      const nextScore = score + 10;
-      setScore(nextScore);
+      scoreRef.current += 10;
+      setScore(scoreRef.current);
       foodRef.current = makeFood(nextSnake);
     } else {
       nextSnake.pop();
     }
 
     snakeRef.current = nextSnake;
-  }, [finishGame, score, status]);
+  }, [finishGame]);
 
   const drawGame = useCallback(() => {
     const canvas = canvasRef.current;
@@ -177,7 +195,10 @@ export default function SnakeGame({ onExit }) {
     }
 
     snakeRef.current.forEach((segment, index) => {
-      const inset = Math.max(1.5 * pixelRatio, Math.min(cellWidth, cellHeight) * 0.12);
+      const inset = Math.max(
+        1.5 * pixelRatio,
+        Math.min(cellWidth, cellHeight) * 0.12
+      );
       const x = segment.x * cellWidth + inset;
       const y = segment.y * cellHeight + inset;
       const segmentWidth = cellWidth - inset * 2;
@@ -208,15 +229,58 @@ export default function SnakeGame({ onExit }) {
   }, []);
 
   useEffect(() => {
-    const speed = Math.max(72, 142 - Math.floor(score / 40) * 8);
+    const arena = arenaRef.current;
+    if (!arena) return undefined;
 
+    function fitBoard() {
+      const bounds = arena.getBoundingClientRect();
+      const availableWidth = Math.max(1, bounds.width);
+      const availableHeight = Math.max(1, bounds.height);
+      const width = Math.floor(
+        Math.min(availableWidth, availableHeight * BOARD_RATIO)
+      );
+      const height = Math.floor(width / BOARD_RATIO);
+
+      setBoardSize((current) => {
+        if (current.width === width && current.height === height) return current;
+        return { width, height };
+      });
+    }
+
+    fitBoard();
+
+    const observer = new ResizeObserver(fitBoard);
+    observer.observe(arena);
+    window.addEventListener("orientationchange", fitBoard);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("orientationchange", fitBoard);
+    };
+  }, []);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const previousOverscroll = document.body.style.overscrollBehavior;
+
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.body.style.overscrollBehavior = previousOverscroll;
+    };
+  }, []);
+
+  useEffect(() => {
     function animate(time) {
       if (!previousTimeRef.current) previousTimeRef.current = time;
 
       const elapsed = Math.min(time - previousTimeRef.current, 250);
       previousTimeRef.current = time;
 
-      if (status === "playing") {
+      if (statusRef.current === "playing") {
+        const speed = Math.max(72, 142 - Math.floor(scoreRef.current / 40) * 8);
         accumulatorRef.current += elapsed;
 
         while (accumulatorRef.current >= speed) {
@@ -234,28 +298,28 @@ export default function SnakeGame({ onExit }) {
     return () => {
       window.cancelAnimationFrame(frameRef.current);
     };
-  }, [drawGame, moveSnake, score, status]);
+  }, [drawGame, moveSnake]);
 
   useEffect(() => {
     function handleKeyDown(event) {
-      const directions = {
-        ArrowUp: { x: 0, y: -1 },
-        w: { x: 0, y: -1 },
-        W: { x: 0, y: -1 },
-        ArrowDown: { x: 0, y: 1 },
-        s: { x: 0, y: 1 },
-        S: { x: 0, y: 1 },
-        ArrowLeft: { x: -1, y: 0 },
-        a: { x: -1, y: 0 },
-        A: { x: -1, y: 0 },
-        ArrowRight: { x: 1, y: 0 },
-        d: { x: 1, y: 0 },
-        D: { x: 1, y: 0 },
+      const keyDirections = {
+        ArrowUp: DIRECTIONS.up,
+        w: DIRECTIONS.up,
+        W: DIRECTIONS.up,
+        ArrowDown: DIRECTIONS.down,
+        s: DIRECTIONS.down,
+        S: DIRECTIONS.down,
+        ArrowLeft: DIRECTIONS.left,
+        a: DIRECTIONS.left,
+        A: DIRECTIONS.left,
+        ArrowRight: DIRECTIONS.right,
+        d: DIRECTIONS.right,
+        D: DIRECTIONS.right,
       };
 
-      if (directions[event.key]) {
+      if (keyDirections[event.key]) {
         event.preventDefault();
-        chooseDirection(directions[event.key]);
+        chooseDirection(keyDirections[event.key]);
         return;
       }
 
@@ -265,13 +329,13 @@ export default function SnakeGame({ onExit }) {
         return;
       }
 
-      if (event.key === " " && status !== "game-over") {
+      if (event.key === " " && statusRef.current !== "game-over") {
         event.preventDefault();
-        setStatus((current) => (current === "paused" ? "playing" : "paused"));
+        updateStatus(statusRef.current === "paused" ? "playing" : "paused");
         return;
       }
 
-      if (event.key === "Enter" && status === "game-over") {
+      if (event.key === "Enter" && statusRef.current === "game-over") {
         event.preventDefault();
         restart();
       }
@@ -279,7 +343,12 @@ export default function SnakeGame({ onExit }) {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [chooseDirection, onExit, restart, status]);
+  }, [chooseDirection, onExit, restart, updateStatus]);
+
+  function togglePause() {
+    if (statusRef.current === "game-over") return;
+    updateStatus(statusRef.current === "paused" ? "playing" : "paused");
+  }
 
   function handleTouchStart(event) {
     const touch = event.touches[0];
@@ -294,19 +363,24 @@ export default function SnakeGame({ onExit }) {
     const differenceY = touch.clientY - touchStartRef.current.y;
     touchStartRef.current = null;
 
-    if (Math.max(Math.abs(differenceX), Math.abs(differenceY)) < 24) return;
+    if (Math.max(Math.abs(differenceX), Math.abs(differenceY)) < 20) return;
 
     if (Math.abs(differenceX) > Math.abs(differenceY)) {
-      chooseDirection(differenceX > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
+      chooseDirection(differenceX > 0 ? DIRECTIONS.right : DIRECTIONS.left);
     } else {
-      chooseDirection(differenceY > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
+      chooseDirection(differenceY > 0 ? DIRECTIONS.down : DIRECTIONS.up);
     }
+  }
+
+  function handleControl(event, direction) {
+    event.preventDefault();
+    chooseDirection(direction);
   }
 
   return (
     <section className="snake-game" aria-label="MAGI Snake game">
       <header className="snake-game__header">
-        <div>
+        <div className="snake-game__identity">
           <span>MAGI ARCADE / HIDDEN PROGRAM</span>
           <strong>DEEZ_NUTZ.SNK</strong>
         </div>
@@ -327,68 +401,83 @@ export default function SnakeGame({ onExit }) {
         </button>
       </header>
 
-      <div
-        className="snake-game__screen"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-      >
-        <canvas ref={canvasRef} data-cursor="PLAY SNAKE" />
+      <div className="snake-game__arena" ref={arenaRef}>
+        <div
+          className="snake-game__screen"
+          style={{ width: boardSize.width, height: boardSize.height }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <canvas ref={canvasRef} data-cursor="PLAY SNAKE" />
 
-        {status !== "playing" && (
-          <div className="snake-game__message">
-            <span>{status === "paused" ? "SYSTEM PAUSED" : "SIGNAL LOST"}</span>
-            <strong>{status === "paused" ? "PAUSED" : "GAME OVER"}</strong>
-            <p>
-              {status === "paused"
-                ? "PRESS SPACE TO CONTINUE"
-                : "PRESS ENTER OR TAP RESTART"}
-            </p>
-            {status === "game-over" && (
-              <button type="button" onClick={restart} data-cursor="RESTART GAME">
-                RESTART
-              </button>
-            )}
-          </div>
-        )}
+          {status !== "playing" && (
+            <div className="snake-game__message">
+              <span>{status === "paused" ? "SYSTEM PAUSED" : "SIGNAL LOST"}</span>
+              <strong>{status === "paused" ? "PAUSED" : "GAME OVER"}</strong>
+              <p>
+                {status === "paused"
+                  ? "TAP PAUSE TO CONTINUE"
+                  : "TAP RESTART TO RUN IT BACK"}
+              </p>
+              {status === "game-over" && (
+                <button type="button" onClick={restart} data-cursor="RESTART GAME">
+                  RESTART
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-
-      <footer className="snake-game__footer">
-        <span>ARROWS / WASD TO MOVE</span>
-        <span>SPACE TO PAUSE</span>
-        <span>ESC TO EXIT</span>
-      </footer>
 
       <div className="snake-game__mobile-controls" aria-label="Snake controls">
         <button
           type="button"
           className="snake-game__up"
-          onClick={() => chooseDirection({ x: 0, y: -1 })}
+          onPointerDown={(event) => handleControl(event, DIRECTIONS.up)}
           aria-label="Move up"
         >
           ↑
         </button>
         <button
           type="button"
-          onClick={() => chooseDirection({ x: -1, y: 0 })}
+          className="snake-game__left"
+          onPointerDown={(event) => handleControl(event, DIRECTIONS.left)}
           aria-label="Move left"
         >
           ←
         </button>
         <button
           type="button"
-          onClick={() => chooseDirection({ x: 0, y: 1 })}
-          aria-label="Move down"
+          className="snake-game__pause"
+          onClick={togglePause}
+          aria-label={status === "paused" ? "Resume game" : "Pause game"}
         >
-          ↓
+          {status === "paused" ? "▶" : "Ⅱ"}
         </button>
         <button
           type="button"
-          onClick={() => chooseDirection({ x: 1, y: 0 })}
+          className="snake-game__right"
+          onPointerDown={(event) => handleControl(event, DIRECTIONS.right)}
           aria-label="Move right"
         >
           →
         </button>
+        <button
+          type="button"
+          className="snake-game__down"
+          onPointerDown={(event) => handleControl(event, DIRECTIONS.down)}
+          aria-label="Move down"
+        >
+          ↓
+        </button>
       </div>
+
+      <footer className="snake-game__footer">
+        <span className="snake-game__desktop-help">ARROWS / WASD TO MOVE</span>
+        <span className="snake-game__mobile-help">SWIPE OR USE CONTROLS</span>
+        <span>SPACE TO PAUSE</span>
+        <span>ESC TO EXIT</span>
+      </footer>
     </section>
   );
 }
