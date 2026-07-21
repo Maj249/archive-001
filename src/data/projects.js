@@ -2,6 +2,7 @@ import germaprobe from "./germaprobe";
 import gameController from "./gameController";
 import drinkingTray from "./drinkingTray";
 import swaga from "./swaga";
+import davinciAerialScrew from "./davinciAerialScrew";
 
 export const projects = [
   germaprobe,
@@ -47,24 +48,7 @@ export const projects = [
     specifications: [],
   },
 
-  {
-    id: 7,
-    slug: "davinci-aerial-screw",
-    title: "DAVINCI AERIAL SCREW",
-    category: "MODEL MAKING / EXPERIMENT",
-    year: "TBC",
-    clearance: "05",
-    description:
-      "Project information is currently being prepared for the MAGI archive.",
-    notes:
-      "Full development notes, outcomes and reflections will be added with the project media.",
-    tools: [],
-    cover: null,
-    images: [],
-    videos: [],
-    process: [],
-    specifications: [],
-  },
+  davinciAerialScrew,
 
   {
     id: 8,
